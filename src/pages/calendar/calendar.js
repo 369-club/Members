@@ -58,30 +58,30 @@ function Calendar() {
 		setEvents([{
 			title: 'OG Event',
 			start: '2024-11-15',
-			end: '2024-11-17',
+			end: '2024-11-18',
 			color: themeColor
 		},
 		{
 			title: 'Physical preparation',
-			start: '2024-11-16-05T13:00',
-			end: '2024-11-16-05T16:00',
+			start: '2024-11-16T13:00',
+			end: '2024-11-16T16:00',
 			color: pink
 		},
 		{
 			title: 'Intentions / Philosophy',
-			start: '2024-11-16-05T16:00',
-			end: '2024-11-16-05T18:00',
+			start: '2024-11-16T16:00',
+			end: '2024-11-16T18:00',
 			color: indigo
 		},
 		{
 			title: '🍄',
-			start: '2024-11-16-05T18:00',
-			end: '2024-11-16-05T22:00',
+			start: '2024-11-16T18:00',
+			end: '2024-11-16T22:00',
 			color: green
 		},
 		{
 			title: 'Dinner',
-			start: '2024-11-16-05T23:00',
+			start: '2024-11-16T23:00',
 			color: blue
 		},]);
 		
