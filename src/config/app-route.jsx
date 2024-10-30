@@ -63,7 +63,7 @@ const AppRoute = [
     path: '*', 
     element: <App />,
     children: [
-    	{ path: '', element: <Navigate to='/dashboard' /> },
+    	{ path: '', element: <Navigate to='/calendar' /> },
     	{ path: 'dashboard', element: <Dashboard /> },
     	{ path: 'analytics', element: <Analytics /> },
     	{ path: 'email/*', 
