@@ -51,25 +51,25 @@ function Calendar() {
 		},
 		{
 			title: 'Physical preparation',
-			start: '2024-11-16T13:00',
-			end: '2024-11-16T16:00',
+			start: '2024-11-16T8:00',
+			end: '2024-11-16T11:00',
 			color: pink
 		},
 		{
 			title: 'Intentions / Philosophy',
-			start: '2024-11-16T16:00',
-			end: '2024-11-16T18:00',
+			start: '2024-11-16T11:00',
+			end: '2024-11-16T13:00',
 			color: indigo
 		},
 		{
 			title: '🍄',
-			start: '2024-11-16T18:00',
-			end: '2024-11-16T22:00',
+			start: '2024-11-16T13:00',
+			end: '2024-11-16T17:00',
 			color: green
 		},
 		{
 			title: 'Dinner',
-			start: '2024-11-16T23:00',
+			start: '2024-11-16T18:00',
 			color: blue
 		},]);
 		
