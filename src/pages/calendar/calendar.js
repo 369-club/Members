@@ -51,7 +51,7 @@ function Calendar() {
 		},
 		{
 			title: 'Physical preparation',
-			start: '2024-11-16T8:00',
+			start: '2024-11-16T08:00',
 			end: '2024-11-16T11:00',
 			color: pink
 		},
