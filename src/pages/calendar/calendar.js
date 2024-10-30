@@ -31,7 +31,6 @@ function Calendar() {
 	
 	useEffect(() => {
 		context.setAppContentFullHeight(true);
-		context.setAppContentClass('p-0');
 				
 		var themeColor = (getComputedStyle(document.body).getPropertyValue('--bs-theme')).trim();
 		var blue = (getComputedStyle(document.body).getPropertyValue('--bs-blue')).trim();
