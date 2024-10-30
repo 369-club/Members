@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { slideToggle } from './../../composables/slideToggle.js';
 
 function Header() {
-		
+
 	const toggleAppSidebarDesktop = () => {
 		var elm = document.querySelector('.app');
 		if (elm) {
@@ -51,7 +51,7 @@ function Header() {
 					<span className="brand-img">
 						<span className="brand-img-text text-theme">H</span>
 					</span>
-					<span className="brand-text">HUD ADMIN</span>
+					<span className="brand-text">d-369 Exclusive Club</span>
 				</Link>
 			</div>
 			

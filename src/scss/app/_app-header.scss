@@ -58,9 +58,7 @@
 		
 		@if $enable-rtl {
 			margin-left: auto;
-		} @else {
-			margin-right: auto;
-		}
+		} 
 		
 		@include media-breakpoint-down(md) {
 			display: none;
