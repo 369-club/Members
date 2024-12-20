@@ -1,0 +1,59 @@
+.memberGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.memberCardAnimation {
+  animation: fadeIn 0.5s ease-out both;
+}
+
+.memberCard {
+  /* background-color: #fff; */
+  /* background: var(--deep-teal-gradient); */
+  background: linear-gradient(56deg, #152935 34%, #1d3645 101%);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.memberCard:hover {
+  /* transform: translateY(-5px); */
+  transform: translateY(-5px);
+}
+
+.memberImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.memberCard h3 {
+  font-size: 1.2rem;
+  color: var(--teal);
+  margin-bottom: 5px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.memberCard p {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
