@@ -13,6 +13,7 @@
     "@iconify/react": "^4.1.1",
     "@popperjs/core": "^2.11.8",
     "@react-google-maps/api": "^2.19.3",
+    "@supabase/supabase-js": "^2.47.10",
     "ajv": "^8.17.1",
     "ajv-keywords": "^5.1.0",
     "apexcharts": "^3.46.0",
