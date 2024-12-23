@@ -1,4 +1,4 @@
-.container {
+/* .container {
   margin: 2rem 0;
   border-radius: 16px;
   overflow: hidden;
@@ -7,9 +7,9 @@
   padding-top: 30%;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   max-width: 600px;
-}
+} */
 
-.video {
+/* .video {
   position: absolute;
   top: 0;
   left: 0;
@@ -17,4 +17,4 @@
   height: 100%;
   background: #171d24;
   object-fit: cover;
-}
+} */

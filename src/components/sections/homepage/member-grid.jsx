@@ -58,7 +58,7 @@ const MemberGrid = () => {
       {members.map((member, index) => (
         <div
           key={member.id}
-          className={styles.memberCardAnimation}
+          className={"animate-fade-in"}
           style={{ animationDelay: `${index * 0.08}s` }}
         >
           <div className={styles.memberCard}>
@@ -67,7 +67,7 @@ const MemberGrid = () => {
               alt={member.name}
               className={styles.memberImage}
             />
-            <h3>{member.name}</h3>
+            <h3 className="line-clamp-1">{member.name}</h3>
             <p>{member.role}</p>
           </div>
         </div>

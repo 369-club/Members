@@ -113,6 +113,10 @@
             & .menu-icon {
               color: $app-sidebar-menu-link-icon-active-color;
             }
+
+            & .menu-text {
+              color: $app-sidebar-menu-link-icon-active-color;
+            }
           }
           &.has-sub {
             & > .menu-submenu {

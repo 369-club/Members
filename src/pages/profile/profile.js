@@ -115,15 +115,22 @@ export default function Profile() {
             />
           </div>
 
-          <a
-            href={profileData.website}
-            className={styles.link}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Globe size={16} />
-            Visit Website
-          </a>
+          <div className="d-flex align-items-center flex-wrap gap-4">
+            <a
+              href={profileData.website}
+              className={styles.link}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Globe size={16} />
+              Visit Website
+            </a>
+
+            <ProfileIntroVideo
+              className={styles.link}
+              src={profileData.introVideo}
+            />
+          </div>
         </div>
       </div>
 
@@ -138,6 +145,7 @@ export default function Profile() {
           {profileData.recentEvents.map((event, index) => (
             <ProfileEventCard
               key={index}
+              index={index}
               title={event.title}
               date={event.date}
               description={event.description}
@@ -146,8 +154,6 @@ export default function Profile() {
           ))}
         </div>
       </div>
-
-      <ProfileIntroVideo src={profileData.introVideo} />
     </div>
   );
 }

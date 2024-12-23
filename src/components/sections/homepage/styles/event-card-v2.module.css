@@ -10,7 +10,9 @@
 }
 
 .eventCard {
-  background: #152935; /* Deep teal color */
+  /* background: #152935;  */
+  /* Deep teal color */
+  background: var(--deep-teal-gradient);
   border-radius: 0.75rem;
   overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -63,7 +65,7 @@
   position: absolute;
   width: 4rem;
   height: 4rem;
-  background-color: #1d3645;
+  background-color: #162d3b;
   z-index: 0;
 }
 
@@ -71,6 +73,7 @@
   top: 0;
   right: 0;
   border-bottom-left-radius: 100%;
+  background-color: #20465d;
 }
 .decorativeElementBottomLeft {
   bottom: 0;
