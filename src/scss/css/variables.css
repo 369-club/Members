@@ -1,5 +1,7 @@
 :root {
   --teal: #249d79;
+  --primary: #249d79;
+  --primary-rgb: 36, 157, 121;
   --deep-teal-gradient: linear-gradient(56deg, #152935 34%, #1d3645 101%);
   /* --deep-teal-gradient: rgba(26, 43, 52, 0.8); */
 }
