@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./styles/member-grid.module.css";
+import { Link } from "react-router-dom";
 
 const members = [
   {
@@ -58,18 +59,24 @@ const MemberGrid = () => {
       {members.map((member, index) => (
         <div
           key={member.id}
-          className={"animate-fade-in"}
+          className={"animate-fade-right position-relative"}
           style={{ animationDelay: `${index * 0.08}s` }}
         >
-          <div className={styles.memberCard}>
-            <img
-              src={member.image}
-              alt={member.name}
-              className={styles.memberImage}
-            />
-            <h3 className="line-clamp-1">{member.name}</h3>
-            <p>{member.role}</p>
-          </div>
+          <Link
+            to="/profile"
+            className=" position-relative top-0 bottom-0 start-0 end-0 link-underline-opacity-0"
+            style={{ textDecoration: "none" }}
+          >
+            <div className={styles.memberCard}>
+              <img
+                src={member.image}
+                alt={member.name}
+                className={styles.memberImage}
+              />
+              <h3 className="line-clamp-1">{member.name}</h3>
+              <p>{member.role}</p>
+            </div>
+          </Link>
         </div>
       ))}
     </div>

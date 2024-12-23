@@ -2,6 +2,7 @@ import React from "react";
 // import Image from "next/image"
 import { CalendarDays, MapPin, Clock, ArrowRight } from "lucide-react";
 import styles from "./styles/event-card-v2.module.css";
+import { Link } from "react-router-dom";
 
 const nextEvent = {
   name: "Summer Gala",
@@ -51,10 +52,14 @@ const EventCardV2 = () => {
               </p>
             </div>
             <p className={styles.description}>{nextEvent.description}</p>
-            <button className={`${styles.button} btn btn-outline-theme px-4`}>
+
+            <Link
+              to={"/event-details"}
+              className={`${styles.button} btn btn-outline-theme px-4`}
+            >
               Learn More
               <ArrowRight className={styles.buttonIcon} />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
