@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import EventCard from "../../components/sections/homepage/event-card";
 import MemberGrid from "../../components/sections/homepage/member-grid";
 import CustomLoader from "../../components/custom-loader";
