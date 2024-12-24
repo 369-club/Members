@@ -12,11 +12,9 @@ function Home({ isLoading }) {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const { data, error } = await supabase
-          .from("EventRegistrations")
-          .select(); // Fetch all rows and columns
+        const { data, error } = await supabase.from("Members").select(); // Fetch all rows and columns
         console.log("🚀 ~ fetchMembers ~ error:", error);
-        console.log("🚀 ~ fetchMembers ~ data:", data);
+        console.log("🚀 ~ venues ~ data:++++++", data);
         setMembers(data);
       } catch (error) {
         console.error("Error fetching members:", error);
