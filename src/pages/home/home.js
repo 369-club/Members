@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import EventCard from "../../components/sections/homepage/event-card";
+import MemberGrid from "../../components/sections/homepage/member-grid";
+import CustomLoader from "../../components/custom-loader";
+import EventCardV2 from "../../components/sections/homepage/event-card-v2";
 import supabase from "../../utils/supabaseClient";
-function Home() {
+
+function Home({ isLoading }) {
   const [members, setMembers] = useState([]);
   console.log("🚀 ~ Home ~ members:", members);
   const [loading, setLoading] = useState(true);
@@ -8,7 +13,7 @@ function Home() {
     const fetchMembers = async () => {
       try {
         const { data, error } = await supabase
-          .from("event_registrations")
+          .from("EventRegistrations")
           .select(); // Fetch all rows and columns
         console.log("🚀 ~ fetchMembers ~ error:", error);
         console.log("🚀 ~ fetchMembers ~ data:", data);
@@ -22,6 +27,13 @@ function Home() {
 
     fetchMembers();
   }, []);
+  if (isLoading)
+    return (
+      <div style={{ height: "calc(100dvh - 120px)" }}>
+        <CustomLoader />
+      </div>
+    );
+
   return (
     <div>
       <ul className="breadcrumb">
@@ -31,11 +43,16 @@ function Home() {
         <li className="breadcrumb-item active">STARTER PAGE</li>
       </ul>
 
-      <h1 className="page-header">
-        Starter Page <small>page header description goes here...</small>
-      </h1>
+      <section className="mb-5">
+        <h2 className="mb-2">Next Upcoming Event</h2>
+        {/* <EventCard /> */}
+        <EventCardV2 />
+      </section>
 
-      <p>Start build your page here</p>
+      <section>
+        <h2 className="mb-2">Inner Circle Members</h2>
+        <MemberGrid />
+      </section>
     </div>
   );
 }
