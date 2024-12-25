@@ -1,11 +1,13 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Calendar, DollarSign, Globe, MapPin } from "lucide-react";
 import styles from "../../scss/css/pages/profile.module.css";
 import TierBadge from "../../components/sections/member-profile/tier-badge";
 import ProfileStatCard from "../../components/sections/member-profile/profile-stat-card";
 import ProfileIntroVideo from "../../components/sections/member-profile/profile-intro-video";
 import ProfileEventCard from "../../components/sections/member-profile/profile-event-card";
+import useFetchData from "../../hooks/fetchData";
+import { useParams } from "react-router-dom";
 
 const profileData = {
   name: "Alex Morgan",
@@ -49,11 +51,28 @@ const profileData = {
 };
 
 export default function Profile() {
+  const { members, events } = useFetchData();
+  console.log("🚀 ~ Profile ~ events:", events);
+  const { slug } = useParams();
+  const [memberProfile, setMemberProfile] = useState(null);
+  console.log("🚀 ~ Profile ~ memberProfile:", memberProfile);
+
+  useEffect(() => {
+    if (slug && members.length > 0) {
+      // Filter members by slug
+      const matchedMember = members.find((member) => member.slug === slug);
+      if (matchedMember) {
+        setMemberProfile(matchedMember);
+      } else {
+        console.error("No member found with the given slug");
+      }
+    }
+  }, [slug, members]);
   return (
     <div>
       <ul className="breadcrumb">
         <li className="breadcrumb-item">
-          <a href="#/">LAYOUT</a>
+          <a href="#">LAYOUT</a>
         </li>
         <li className="breadcrumb-item active">Profile</li>
       </ul>
@@ -73,8 +92,10 @@ export default function Profile() {
 
         <div className={styles.info}>
           <div>
-            <h1 className={`${styles.name} mb-2`}>{profileData.name}</h1>
-            <TierBadge tier={profileData.tier} />
+            <h1 className={`${styles.name} mb-2`}>
+              {memberProfile?.full_name ?? ""}
+            </h1>
+            <TierBadge tier={memberProfile?.tier ?? ""} />
           </div>
 
           {/* <p className={`${styles.about} mb-0`}> {profileData.about}</p> */}
@@ -82,7 +103,7 @@ export default function Profile() {
           <div className={`${styles.stats} stats`}>
             <ProfileStatCard
               label="Total Spent"
-              value={`$${profileData.totalSpent.toLocaleString()}`}
+              value={memberProfile?.total_spent ?? 0}
               icon={
                 <DollarSign
                   size={14}
@@ -104,7 +125,7 @@ export default function Profile() {
             />
             <ProfileStatCard
               label="Location"
-              value={profileData.location}
+              value={memberProfile?.location ?? "none"}
               icon={
                 <MapPin
                   size={14}
@@ -136,22 +157,30 @@ export default function Profile() {
 
       <div className="">
         <h3 className="mb-2">About</h3>
-        <p className={`${styles.about} mb-0`}> {profileData.about}</p>
+        <p className={`${styles.about} mb-0`}>
+          {" "}
+          {memberProfile?.about ?? "No Information"}
+        </p>
       </div>
 
       <div className={styles.eventsSection}>
         <h2>Recent Events</h2>
         <div className={styles.eventsGrid}>
-          {profileData.recentEvents.map((event, index) => (
-            <ProfileEventCard
-              key={index}
-              index={index}
-              title={event.title}
-              date={event.date}
-              description={event.description}
-              image={event.image}
-            />
-          ))}
+          {events &&
+            events?.map((event, index) => (
+              <ProfileEventCard
+                key={index}
+                id={event.id}
+                index={index}
+                title={event?.title}
+                date={event?.when}
+                description={
+                  event?.description ??
+                  "Annual Celebration of our perfomance on work"
+                }
+                image={"/assets/img/dummy-event1.png"}
+              />
+            ))}
         </div>
       </div>
     </div>

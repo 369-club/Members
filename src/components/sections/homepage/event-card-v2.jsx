@@ -3,6 +3,7 @@ import React from "react";
 import { CalendarDays, MapPin, Clock, ArrowRight } from "lucide-react";
 import styles from "./styles/event-card-v2.module.css";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 
 const nextEvent = {
   name: "Summer Gala",
@@ -14,14 +15,14 @@ const nextEvent = {
   image: "/assets/img/event1.png",
 };
 
-const EventCardV2 = () => {
+const EventCardV2 = ({ event, venue }) => {
   return (
     <div className={styles.eventCard}>
       <div className={styles.cardContent}>
         <div className={styles.imageContainer}>
           <img
-            src={nextEvent.image}
-            alt={nextEvent.name}
+            src={event?.image ?? "/assets/img/event1.png"}
+            alt={event?.title ?? ""}
             layout="fill"
             className={styles.image}
           />
@@ -36,25 +37,31 @@ const EventCardV2 = () => {
           />
 
           <div className={"position-relative"} style={{ zIndex: 1 }}>
-            <h3 className={styles.title}>{nextEvent.name}</h3>
+            <h3 className={styles.title}>{event?.title ?? ""}</h3>
             <div className={styles.infoContainer}>
               <p className={styles.infoItem}>
                 <CalendarDays className={styles.icon} />
-                <span>{nextEvent.date}</span>
+                <span>
+                  {event?.when
+                    ? format(new Date(event?.when), "MMM dd, yyyy")
+                    : ""}
+                </span>
               </p>
               <p className={styles.infoItem}>
                 <Clock className={styles.icon} />
-                <span>{nextEvent.time}</span>
+                <span>{event?.time ?? "no time"}</span>
               </p>
               <p className={styles.infoItem}>
                 <MapPin className={styles.icon} />
-                <span>{nextEvent.location}</span>
+                <span>{venue?.address ?? "no location"}</span>
               </p>
             </div>
-            <p className={styles.description}>{nextEvent.description}</p>
+            <p className={styles.description}>
+              {event?.description ?? "no description"}
+            </p>
 
             <Link
-              to={"/event-details"}
+              to={`/event/${event?.id}`}
               className={`${styles.button} btn btn-outline-theme px-4`}
             >
               Learn More

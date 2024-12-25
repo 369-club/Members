@@ -53,7 +53,7 @@ const members = [
   },
 ];
 
-const MemberGrid = () => {
+const MemberGrid = ({ members = [] }) => {
   return (
     <div className={styles.memberGrid}>
       {members.map((member, index) => (
@@ -63,18 +63,19 @@ const MemberGrid = () => {
           style={{ animationDelay: `${index * 0.08}s` }}
         >
           <Link
-            to="/profile"
+            to={`/member/${member.slug}`}
             className=" position-relative top-0 bottom-0 start-0 end-0 link-underline-opacity-0"
             style={{ textDecoration: "none" }}
           >
             <div className={styles.memberCard}>
               <img
-                src={member.image}
-                alt={member.name}
+                // src={member.profile_picture}
+                src="/assets/img/avatar4.png"
+                alt={member.full_name}
                 className={styles.memberImage}
               />
-              <h3 className="line-clamp-1">{member.name}</h3>
-              <p>{member.role}</p>
+              <h3 className="line-clamp-1">{member.full_name}</h3>
+              <p>{member.tier}</p>
             </div>
           </Link>
         </div>

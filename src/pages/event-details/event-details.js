@@ -1,8 +1,10 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { AppSettings } from "../../config/app-settings";
 import EventHeader from "../../components/sections/event-details/event-header";
 import MemberList from "../../components/sections/event-details/memeber-list";
 import styles from "../../scss/css/pages/event-detail.module.css";
+import { useParams } from "react-router-dom";
+import useFetchData from "../../hooks/fetchData";
 
 const eventData = {
   title: "Tech Innovators Summit 2024",
@@ -56,7 +58,29 @@ const eventData = {
 
 const EventDetails = () => {
   const context = useContext(AppSettings);
-
+  const { eventId } = useParams();
+  const { events, venues } = useFetchData();
+  const [eventDetails, setEventDetails] = useState(null);
+  const [venueDetails, setVenueDetails] = useState(null);
+  console.log("🚀 ~ EventDetails ~ venueDetails:", venueDetails);
+  console.log("🚀 ~ EventDetails ~ eventDetails:", eventDetails);
+  useEffect(() => {
+    if (eventId && events?.length > 0) {
+      // Filter members by slug
+      const matchedEvent = events.find((event) => event.id === eventId);
+      if (matchedEvent) {
+        setEventDetails(matchedEvent);
+        const venue = venues.find(
+          (venue) => venue.id === matchedEvent?.venue_id
+        );
+        if (venue) {
+          setVenueDetails(venue);
+        }
+      } else {
+        console.error("No event found with the given event id");
+      }
+    }
+  }, [eventId, events]);
   useEffect(() => {
     context.setAppTopNav(true);
     context.setAppSidebarNone(true);
@@ -70,7 +94,7 @@ const EventDetails = () => {
   }, []);
   return (
     <div className={styles.container}>
-      <EventHeader event={eventData} />
+      <EventHeader event={eventDetails} venue={venueDetails} />
       <div className={styles.content}>
         <MemberList members={eventData.members} />
       </div>

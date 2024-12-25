@@ -2,9 +2,11 @@
 import React from "react";
 import styles from "./styles/profile-event-card.module.css";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 
 export default function ProfileEventCard({
   title,
+  id,
   date,
   description,
   image,
@@ -16,7 +18,7 @@ export default function ProfileEventCard({
       style={{ animationDelay: `${index * 0.08}s` }}
     >
       <Link
-        to="/event-details"
+        to={`/event/${id}`}
         className="position-relative top-0 bottom-0 start-0 end-0 link-underline-opacity-0"
         style={{ textDecoration: "none" }}
       >
@@ -31,7 +33,9 @@ export default function ProfileEventCard({
             />
           </div>
           <h3 className={styles.title}>{title}</h3>
-          <p className={styles.date}>{date}</p>
+          <p className={styles.date}>
+            {date ? format(new Date(date), "MMM dd, yyyy") : ""}
+          </p>
           <p className={`${styles.description} line-clamp-2`}>{description}</p>
         </div>
       </Link>
