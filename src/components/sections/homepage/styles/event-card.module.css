@@ -1,0 +1,58 @@
+.eventCard {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  animation: fadeInWidth 0.7s ease-out;
+  background: var(--deep-teal-gradient);
+  position: relative;
+}
+
+.eventImage {
+  flex: 1;
+  max-width: 300px;
+}
+
+.eventImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.eventDetails {
+  flex: 2;
+  padding: 20px;
+}
+
+.eventDetails h3 {
+  font-size: 1.8rem;
+  color: var(--teal);
+  margin-bottom: 10px;
+}
+
+.eventDate,
+.eventLocation {
+  font-size: 1rem;
+  color: #a6a6a6;
+  margin-bottom: 5px;
+}
+
+.eventDescription {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #a6a6a6;
+  margin-top: 10px;
+}
+
+@keyframes fadeInWidth {
+  from {
+    opacity: 0;
+    width: 30%;
+    /* transform: scale(0.95); */
+  }
+  to {
+    opacity: 1;
+    width: 100%;
+    /* transform: scale(1); */
+  }
+}
