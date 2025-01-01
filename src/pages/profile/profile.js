@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Calendar, DollarSign, Globe, MapPin } from "lucide-react";
 import styles from "../../scss/css/pages/profile.module.css";
 import TierBadge from "../../components/sections/member-profile/tier-badge";
@@ -8,6 +8,7 @@ import ProfileIntroVideo from "../../components/sections/member-profile/profile-
 import ProfileEventCard from "../../components/sections/member-profile/profile-event-card";
 import useFetchData from "../../hooks/fetchData";
 import { useParams } from "react-router-dom";
+import supabase from "../../utils/supabaseClient";
 
 const profileData = {
   name: "Alex Morgan",
@@ -51,23 +52,75 @@ const profileData = {
 };
 
 export default function Profile() {
-  const { members, events } = useFetchData();
-  console.log("🚀 ~ Profile ~ events:", events);
-  const { slug } = useParams();
+  const { members, events, venues } = useFetchData();
+  const { memberId } = useParams();
   const [memberProfile, setMemberProfile] = useState(null);
-  console.log("🚀 ~ Profile ~ memberProfile:", memberProfile);
-
-  useEffect(() => {
-    if (slug && members.length > 0) {
-      // Filter members by slug
-      const matchedMember = members.find((member) => member.slug === slug);
-      if (matchedMember) {
-        setMemberProfile(matchedMember);
-      } else {
-        console.error("No member found with the given slug");
+  const [memberEvents, setMemberEvents] = useState([]);
+  const fetchMemberProfile = useCallback(
+    async (memberId) => {
+      try {
+        if (memberId && members?.length > 0) {
+          // Filter members by slug
+          const matchedMember = members.find(
+            (member) => member.id === memberId
+          );
+          if (matchedMember) {
+            setMemberProfile(matchedMember);
+          }
+        }
+      } catch (error) {
+        console.error("🚀 ~ fetchMemberProfile ~ error:", error);
       }
+    },
+    [members]
+  );
+  const fetchMemberEvents = useCallback(async (memberId) => {
+    try {
+      const { data: registrationData, error: registrationError } =
+        await supabase
+          .from("EventRegistrations")
+          .select("event_id")
+          .eq("member_id", memberId);
+
+      if (registrationError) {
+        console.error("Error fetching EventRegistrations:", registrationError);
+        return;
+      }
+
+      const eventIds = registrationData?.map(
+        (registration) => registration.event_id
+      );
+
+      if (eventIds?.length === 0) {
+        console.log("No members found for the event.");
+        return [];
+      }
+
+      const { data: eventsData, error: membersError } = await supabase
+        .from("Events")
+        .select("*")
+        .in("id", eventIds);
+      if (eventsData && eventsData.length > 0) {
+        setMemberEvents(eventsData);
+      }
+    } catch (error) {
+      console.error("Error in fetchEventMembers:", error);
     }
-  }, [slug, members]);
+  }, []);
+  useEffect(() => {
+    if (memberId) {
+      fetchMemberProfile(memberId);
+      fetchMemberEvents(memberId);
+    }
+  }, [memberId, fetchMemberProfile]);
+  const getEventVenue = (venueId) => {
+    if (venues && venues?.length > 0) {
+      const matchedVenue = venues?.find((venue) => venue.id === venueId);
+      if (matchedVenue) return matchedVenue;
+    }
+    return null;
+  };
+
   return (
     <div>
       <ul className="breadcrumb">
@@ -82,12 +135,21 @@ export default function Profile() {
          */}
 
         <div className={styles.profileContainer}>
-          <img
-            src={"/assets/img/profile-avatar.png"}
-            alt={"profile"}
-            className={styles.image}
-            priority
-          />
+          {memberProfile && memberProfile?.profile_picture ? (
+            <img
+              src={memberProfile?.profile_picture}
+              alt={"profile"}
+              className={styles.image}
+              priority
+            />
+          ) : (
+            <img
+              src={"/assets/img/profile-avatar.png"}
+              alt={"profile"}
+              className={styles.image}
+              priority
+            />
+          )}
         </div>
 
         <div className={styles.info}>
@@ -114,7 +176,7 @@ export default function Profile() {
             />
             <ProfileStatCard
               label="Last Event"
-              value={profileData.lastEvent}
+              value={profileData?.lastEvent}
               icon={
                 <Calendar
                   size={14}
@@ -166,21 +228,21 @@ export default function Profile() {
       <div className={styles.eventsSection}>
         <h2>Recent Events</h2>
         <div className={styles.eventsGrid}>
-          {events &&
-            events?.map((event, index) => (
+          {memberEvents && memberEvents?.length > 0 ? (
+            memberEvents?.map((event, index) => (
               <ProfileEventCard
                 key={index}
                 id={event.id}
                 index={index}
                 title={event?.title}
                 date={event?.when}
-                description={
-                  event?.description ??
-                  "Annual Celebration of our perfomance on work"
-                }
-                image={"/assets/img/dummy-event1.png"}
+                venue={getEventVenue(event?.venue_id)}
+                image={event?.profile_picture}
               />
-            ))}
+            ))
+          ) : (
+            <h1>No Events found </h1>
+          )}
         </div>
       </div>
     </div>

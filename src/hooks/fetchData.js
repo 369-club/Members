@@ -3,13 +3,13 @@ import supabase from "../utils/supabaseClient";
 
 const useFetchData = () => {
   const [members, setMembers] = useState([]);
-  console.log("🚀 ~ useFetchData ~ members:", members);
+  // console.log("🚀 ~ useFetchData ~ members:", members);
   const [venues, setVenues] = useState([]);
-  console.log("🚀 ~ useFetchData ~ venues:", venues);
+  // console.log("🚀 ~ useFetchData ~ venues:", venues);
   const [events, setEvents] = useState([]);
-  console.log("🚀 ~ useFetchData ~ events:", events);
+  // console.log("🚀 ~ useFetchData ~ events:", events);
   const [eventRegistrations, setEventRegistrations] = useState([]);
-  console.log("🚀 ~ useFetchData ~ eventRegistrations:", eventRegistrations);
+  // console.log("🚀 ~ useFetchData ~ eventRegistrations:", eventRegistrations);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,8 +18,8 @@ const useFetchData = () => {
         const { data: membersData, error: membersError } = await supabase
           .from("Members")
           .select();
-        console.log("🚀 ~ fetchData ~ membersError:", membersError);
-        console.log("🚀 ~ fetchData ~ membersData:", membersData);
+        // console.log("🚀 ~ fetchData ~ membersError:", membersError);
+        // console.log("🚀 ~ fetchData ~ membersData:", membersData);
         const { data: venuesData, error: venuesError } = await supabase
           .from("Venues")
           .select();
