@@ -8,8 +8,8 @@ export default function ProfileEventCard({
   title,
   id,
   date,
-  description,
   image,
+  venue,
   index,
 }) {
   return (
@@ -24,19 +24,31 @@ export default function ProfileEventCard({
       >
         <div className={styles.card}>
           <div className={styles.imageContainer}>
-            <img
-              src={image}
-              alt={title}
-              width={300}
-              height={200}
-              className={styles.image}
-            />
+            {image ? (
+              <img
+                src={image}
+                alt={title}
+                width={300}
+                height={200}
+                className={styles.image}
+              />
+            ) : (
+              <img
+                src={"/assets/img/dummy-event1.png"}
+                alt={title}
+                width={300}
+                height={200}
+                className={styles.image}
+              />
+            )}
           </div>
           <h3 className={styles.title}>{title}</h3>
           <p className={styles.date}>
             {date ? format(new Date(date), "MMM dd, yyyy") : ""}
           </p>
-          <p className={`${styles.description} line-clamp-2`}>{description}</p>
+          <p className={`${styles.description} line-clamp-2`}>
+            {venue?.address ?? ""}
+          </p>
         </div>
       </Link>
     </div>

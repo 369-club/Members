@@ -1,9 +1,9 @@
 import React from "react";
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
 import styles from "../../../scss/css/pages/event-detail.module.css";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
-export default function EventHeader({ event, venue }) {
+export default function EventHeader({ event, venue, totalPeople }) {
   const DetailCard = ({ icon: Icon, label, value, index }) => (
     <div
       className="animate-fade-right h-100"
@@ -24,12 +24,21 @@ export default function EventHeader({ event, venue }) {
   return (
     <div className={styles.header}>
       <div className={styles.heroImage}>
-        <img
-          src={event?.image ?? "/assets/img/event-avatar4.png"}
-          alt={event?.title ?? ""}
-          fill
-          priority
-        />
+        {event?.profile_picture ? (
+          <img
+            src={event?.profile_picture}
+            alt={event?.title ?? ""}
+            layout="fill"
+            priority
+          />
+        ) : (
+          <img
+            src="/assets/img/event1.png"
+            alt={event?.title ?? ""}
+            layout="fill"
+            priority
+          />
+        )}
       </div>
       <div className={styles.heroOverlay} />
 
@@ -50,7 +59,11 @@ export default function EventHeader({ event, venue }) {
               index="2"
               icon={Clock}
               label="Time"
-              value={event?.time ?? "9:00 AM - 6:00 PM"}
+              value={
+                event?.when
+                  ? format(parseISO(event?.when), "hh:mm:ss a")
+                  : "no time"
+              }
             />
             <DetailCard
               index="3"
@@ -62,7 +75,7 @@ export default function EventHeader({ event, venue }) {
               index="4"
               icon={Users}
               label="Attendees"
-              value={`${event?.attendeeCount ?? 0} people`}
+              value={`${totalPeople ?? 0} people`}
             />
           </div>
         </div>

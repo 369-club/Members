@@ -3,7 +3,7 @@ import React from "react";
 import { CalendarDays, MapPin, Clock, ArrowRight } from "lucide-react";
 import styles from "./styles/event-card-v2.module.css";
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 const nextEvent = {
   name: "Summer Gala",
@@ -20,12 +20,22 @@ const EventCardV2 = ({ event, venue }) => {
     <div className={styles.eventCard}>
       <div className={styles.cardContent}>
         <div className={styles.imageContainer}>
-          <img
-            src={event?.image ?? "/assets/img/event1.png"}
-            alt={event?.title ?? ""}
-            layout="fill"
-            className={styles.image}
-          />
+          {event?.profile_picture ? (
+            <img
+              src={event?.profile_picture}
+              alt={event?.title ?? ""}
+              layout="fill"
+              className={styles.image}
+            />
+          ) : (
+            <img
+              src="/assets/img/event1.png"
+              alt={event?.title ?? ""}
+              layout="fill"
+              className={styles.image}
+            />
+          )}
+
           <div className={styles.imageOverlay}></div>
         </div>
         <div className={styles.contentContainer}>
@@ -49,7 +59,11 @@ const EventCardV2 = ({ event, venue }) => {
               </p>
               <p className={styles.infoItem}>
                 <Clock className={styles.icon} />
-                <span>{event?.time ?? "no time"}</span>
+                <span>
+                  {event?.when
+                    ? format(parseISO(event?.when), "hh:mm:ss a")
+                    : "no time"}
+                </span>
               </p>
               <p className={styles.infoItem}>
                 <MapPin className={styles.icon} />
