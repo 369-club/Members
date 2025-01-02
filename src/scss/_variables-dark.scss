@@ -74,10 +74,10 @@ $theme-colors-dark: (
 	"pink":      $pink-dark,
 	"green":     $green-dark,
 	"yellow":    $yellow-dark,
-	"teal":      $indigo-dark,
+	"teal":      $teal-dark,
 	"muted":     $gray-500,
-  	"light":     $light-dark,
-  	"lime":      $lime-dark,
+  "light":     $light-dark,
+  "lime":      $lime-dark,
 	"gray-100":  $gray-100,
 	"gray-200":  $gray-200,
 	"gray-300":  $gray-300,
@@ -123,7 +123,7 @@ $dark-border-subtle-dark:                       $gray-800 !default;
 $body-font-weight-dark:                         300 !default;
 $body-letter-spacing-dark:                      rem(.75px) !default;
 $body-bg-dark:                                  #1d2835 !default;
-$body-bg-gradient-dark:                         linear-gradient(0deg, rgba(50,70,80,.6) 0%, rgba(13,16,27,1) 100%) !default;
+$body-bg-gradient-dark:                         linear-gradient(180deg, rgba(50,70,80,.9) 0%, rgba(13,16,27,1) 100%) !default;
 $body-bg-cover-dark:                            url('images/cover-dark.jpg') !default;
 $body-bg-image-dark:                            url('images/pattern-dark.png') !default;
 $body-bg-image-size-dark:                       rem(75px) !default;

@@ -4,6 +4,7 @@ import TopNav from './components/top-nav/top-nav.jsx';
 import Sidebar from './components/sidebar/sidebar.jsx';
 import Content from './components/content/content.jsx';
 import Footer from './components/footer/footer.jsx';
+import ThemePanel from './components/theme-panel/theme-panel.jsx';
 import { AppSettings } from './config/app-settings.js';
 
 function App() {
@@ -126,6 +127,7 @@ function App() {
 				{!appSidebarNone && (<Sidebar />)}
 				{!appContentNone && (<Content className={appContentClass} />)}
 				{appFooter && (<Footer />)}
+				<ThemePanel />
 			</div>
 		</AppSettings.Provider>
 	)

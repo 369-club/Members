@@ -46,6 +46,7 @@ function ThemePanel() {
 		document.dispatchEvent(new Event('theme-reload'));
 	}
 	
+	
 	const setAppCover = (event, cover) => {
 		event.preventDefault();
 		

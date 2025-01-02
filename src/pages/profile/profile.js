@@ -1,109 +1,250 @@
-import 'lity';
-import 'lity/dist/lity.min.css';
-import React from 'react';
-import { Card, CardBody } from './../../components/card/card.jsx';
+"use client";
+import React, { useCallback, useEffect, useState } from "react";
+import { Calendar, DollarSign, Globe, MapPin } from "lucide-react";
+import styles from "../../scss/css/pages/profile.module.css";
+import TierBadge from "../../components/sections/member-profile/tier-badge";
+import ProfileStatCard from "../../components/sections/member-profile/profile-stat-card";
+import ProfileIntroVideo from "../../components/sections/member-profile/profile-intro-video";
+import ProfileEventCard from "../../components/sections/member-profile/profile-event-card";
+import useFetchData from "../../hooks/fetchData";
+import { useParams } from "react-router-dom";
+import supabase from "../../utils/supabaseClient";
 
-function Profile() {
+const profileData = {
+  name: "Alex Morgan",
+  slug: "alex-morgan",
+  picture: "/placeholder.svg?height=300&width=300",
+  about:
+    "Passionate club member with a keen interest in community events and social gatherings.",
+  introVideo: "https://example.com/intro-video.mp4",
+  tier: "Platinum",
+  totalSpent: 15000,
+  lastEvent: "Summer Gala 2023",
+  website: "https://alexmorgan.com",
+  location: "New York, NY",
+  recentEvents: [
+    {
+      title: "Summer Gala 2023",
+      date: "Aug 15, 2023",
+      description:
+        "Annual summer celebration with live music and gourmet dining",
+      image: "/assets/img/dummy-event3.png",
+    },
+    {
+      title: "Tech Conference",
+      date: "Jul 22, 2023",
+      description: "Exploring the latest in technology and innovation",
+      image: "/assets/img/dummy-event5.png",
+    },
+    {
+      title: "Charity Golf Tournament",
+      date: "Jun 10, 2023",
+      description: "Annual charity golf event supporting local communities",
+      image: "/assets/img/dummy-event4.png",
+    },
+    {
+      title: "Elegant Celebration",
+      date: "Jun 10, 2023",
+      description: "Annual Celebration of our perfomance on work",
+      image: "/assets/img/dummy-event1.png",
+    },
+  ],
+};
+
+export default function Profile() {
+  const { members, events, venues } = useFetchData();
+  const { memberId } = useParams();
+  const [memberProfile, setMemberProfile] = useState(null);
+  const [memberEvents, setMemberEvents] = useState([]);
+  const fetchMemberProfile = useCallback(
+    async (memberId) => {
+      try {
+        if (memberId && members?.length > 0) {
+          // Filter members by slug
+          const matchedMember = members.find(
+            (member) => member.id === memberId
+          );
+          if (matchedMember) {
+            setMemberProfile(matchedMember);
+          }
+        }
+      } catch (error) {
+        console.error("🚀 ~ fetchMemberProfile ~ error:", error);
+      }
+    },
+    [members]
+  );
+  const fetchMemberEvents = useCallback(async (memberId) => {
+    try {
+      const { data: registrationData, error: registrationError } =
+        await supabase
+          .from("EventRegistrations")
+          .select("event_id")
+          .eq("member_id", memberId);
+
+      if (registrationError) {
+        console.error("Error fetching EventRegistrations:", registrationError);
+        return;
+      }
+
+      const eventIds = registrationData?.map(
+        (registration) => registration.event_id
+      );
+
+      if (eventIds?.length === 0) {
+        console.log("No members found for the event.");
+        return [];
+      }
+
+      const { data: eventsData, error: membersError } = await supabase
+        .from("Events")
+        .select("*")
+        .in("id", eventIds);
+      if (eventsData && eventsData.length > 0) {
+        setMemberEvents(eventsData);
+      }
+    } catch (error) {
+      console.error("Error in fetchEventMembers:", error);
+    }
+  }, []);
+  useEffect(() => {
+    if (memberId) {
+      fetchMemberProfile(memberId);
+      fetchMemberEvents(memberId);
+    }
+  }, [memberId, fetchMemberProfile]);
+  const getEventVenue = (venueId) => {
+    if (venues && venues?.length > 0) {
+      const matchedVenue = venues?.find((venue) => venue.id === venueId);
+      if (matchedVenue) return matchedVenue;
+    }
+    return null;
+  };
+
   return (
-    <Card>
-      <CardBody className="p-0">
-        <div className="profile">
-          <div className="profile-container">
-            <div className="profile-sidebar">
-              <div className="desktop-sticky-top">
-                <div className="profile-img">
-                  <img src="/assets/img/user/profile.jpg" alt="" />
-                </div>
+    <div>
+      <ul className="breadcrumb">
+        <li className="breadcrumb-item">
+          <a href="#">LAYOUT</a>
+        </li>
+        <li className="breadcrumb-item active">Profile</li>
+      </ul>
 
-                <h4>Gislain Armand</h4>
-                <div className="mb-3 text-inverse text-opacity-50 fw-bold mt-n2">@GTA</div>
-                <div className="mb-1">
-                  <i className="fa fa-map-marker-alt fa-fw text-inverse text-opacity-50"></i> Montreal, QC, Canada
-                </div>
-                <div className="mb-3">
-                  <i className="fa fa-link fa-fw text-inverse text-opacity-50"></i> randmar.io
-                </div>
+      <div className={styles.header}>
+        {/* <ProfileImage src={profileData.picture} alt={profileData.name} />
+         */}
 
-              </div>
-            </div>
+        <div className={styles.profileContainer}>
+          {memberProfile && memberProfile?.profile_picture ? (
+            <img
+              src={memberProfile?.profile_picture}
+              alt={"profile"}
+              className={styles.image}
+              priority
+            />
+          ) : (
+            <img
+              src={"/assets/img/profile-avatar.png"}
+              alt={"profile"}
+              className={styles.image}
+              priority
+            />
+          )}
+        </div>
 
-            <div className="profile-content">
-              <ul className="profile-tab nav nav-tabs nav-tabs-v2">
-                <li className="nav-item">
-                  <div className="nav-link active" data-bs-toggle="tab">
-                    <div className="nav-field">Total Spent</div>
-                    <div className="nav-value">200.00$</div>
-                  </div>
-                </li>
-                <li className="nav-item">
-                  <div className="nav-link" data-bs-toggle="tab">
-                    <div className="nav-field">Last Event</div>
-                    <div className="nav-value">October 8th</div>
-                  </div>
-                </li>
-                <li className="nav-item">
-                  <div className="nav-link" data-bs-toggle="tab">
-                    <div className="nav-field">Tier</div>
-                    <div className="nav-value">Premium</div>
-                  </div>
-                </li>
-              </ul>
-              <div className="profile-content-container">
-                <div className="row gx-4">
-                  <div className="col-xl-12">
-                    <div className="tab-content p-0">
-                      <div className="tab-pane fade show active" id="profile-post">
-                        <Card className="mb-3">
-                          <CardBody>
+        <div className={styles.info}>
+          <div>
+            <h1 className={`${styles.name} mb-2`}>
+              {memberProfile?.full_name ?? ""}
+            </h1>
+            <TierBadge tier={memberProfile?.tier ?? ""} />
+          </div>
 
-                            <p>
-                              A seasoned software engineer with a diverse portfolio including e-commerce,
-                              cryptocurrencies, aerospace, medical file management, and automation of legal processes.
-                              <br /><br />
-                              In 2016, Gislain joined Randmar where he started implementing his vision, now allowing
-                              Manufacturers from multiple industries to work directly with Resellers.
-                              <br /><br />
-                              You will always find him exploring a new section of the world and he believes in "doing
-                              something different every single day.
-                            </p>
+          {/* <p className={`${styles.about} mb-0`}> {profileData.about}</p> */}
 
-                          </CardBody>
-                        </Card>
+          <div className={`${styles.stats} stats`}>
+            <ProfileStatCard
+              label="Total Spent"
+              value={memberProfile?.total_spent ?? 0}
+              icon={
+                <DollarSign
+                  size={14}
+                  style={{ marginTop: "2px" }}
+                  className="text-theme"
+                />
+              }
+            />
+            <ProfileStatCard
+              label="Last Event"
+              value={profileData?.lastEvent}
+              icon={
+                <Calendar
+                  size={14}
+                  style={{ marginTop: "2px" }}
+                  className="text-theme"
+                />
+              }
+            />
+            <ProfileStatCard
+              label="Location"
+              value={memberProfile?.location ?? "none"}
+              icon={
+                <MapPin
+                  size={14}
+                  style={{ marginTop: "2px" }}
+                  className="text-theme"
+                />
+              }
+            />
+          </div>
 
-                        <h4>Resent events</h4>
+          <div className="d-flex align-items-center flex-wrap gap-4">
+            <a
+              href={profileData.website}
+              className={styles.link}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Globe size={16} />
+              Visit Website
+            </a>
 
-                        <Card className="card mb-3">
-                          <CardBody>
-                            <h5>Exclusive invitation</h5>
-                            <div className="profile-img-list">
-                              <div className="profile-img-list-item main"><a href="/assets/img/gallery/gallery-1.jpg" data-lity className="profile-img-list-link"><span className="profile-img-content" style={{ backgroundImage: 'url(/assets/img/gallery/gallery-1.jpg)' }}></span></a></div>
-
-                              <Card className="mb-3">
-                                <CardBody>
-                                  <p>
-                                    Emile and Gislain are starting a Club with the objective of elevating its members.
-                                    <br /><br />
-                                    The conversation will be guided towards your ambition and the lifestyle you want for yourself.
-                                  </p>
-                                </CardBody>
-                              </Card>
-                            </div>
-                          </CardBody>
-                        </Card>
-
-                      </div>
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
+            <ProfileIntroVideo
+              className={styles.link}
+              src={profileData.introVideo}
+            />
           </div>
         </div>
-      </CardBody>
-    </Card>
-  )
-}
+      </div>
 
-export default Profile;
+      <div className="">
+        <h3 className="mb-2">About</h3>
+        <p className={`${styles.about} mb-0`}>
+          {" "}
+          {memberProfile?.about ?? "No Information"}
+        </p>
+      </div>
+
+      <div className={styles.eventsSection}>
+        <h2>Recent Events</h2>
+        <div className={styles.eventsGrid}>
+          {memberEvents && memberEvents?.length > 0 ? (
+            memberEvents?.map((event, index) => (
+              <ProfileEventCard
+                key={index}
+                id={event.id}
+                index={index}
+                title={event?.title}
+                date={event?.when}
+                venue={getEventVenue(event?.venue_id)}
+                image={event?.profile_picture}
+              />
+            ))
+          ) : (
+            <h1>No Events found </h1>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
