@@ -12,17 +12,14 @@ const EventDetails = () => {
   const { eventId } = useParams();
   const { events, venues } = useFetchData();
   const [eventDetails, setEventDetails] = useState(null);
-  console.log("🚀 ~ EventDetails ~ eventDetails:", eventDetails);
   const [venueDetails, setVenueDetails] = useState(null);
-  console.log("🚀 ~ EventDetails ~ venueDetails:", venueDetails);
   const [eventMembers, setEventMembers] = useState([]);
-  console.log(
-    "🚀 ~ EventDetails ~ eventMembers++++++++ line no 69:",
-    eventMembers
-  );
+  const [eventDetailsLoading, setEventDetailsLoading] = useState(true);
+  const [eventMembersLoading, setEventMembersLoading] = useState(true);
 
   const fetchEventDetail = useCallback(
     async (eventId) => {
+      setEventDetailsLoading(true);
       try {
         if (eventId && events?.length > 0) {
           const newId = eventId;
@@ -45,12 +42,15 @@ const EventDetails = () => {
       } catch (error) {
         console.error("🚀 ~ fetchEventDetail ~ error:", error);
         // TODO(tanzeel): delete this line, or fix it? setError("Failed to fetch event details.");
+      } finally {
+        setEventDetailsLoading(false);
       }
     },
     [events, venues]
   );
 
   const fetchEventMembers = useCallback(async (eventId) => {
+    setEventMembersLoading(true);
     try {
       const { data: registrationData, error: registrationError } =
         await supabase
@@ -81,6 +81,8 @@ const EventDetails = () => {
       }
     } catch (error) {
       console.error("Error in fetchEventMembers:", error);
+    } finally {
+      setEventMembersLoading(false);
     }
   }, []);
 
@@ -103,14 +105,22 @@ const EventDetails = () => {
   }, []);
   return (
     <div className={styles.container}>
-      <EventHeader
-        event={eventDetails}
-        venue={venueDetails}
-        totalPeople={eventMembers?.length}
-      />
-      <div className={styles.content}>
-        <MemberList members={eventMembers} />
-      </div>
+      {eventDetailsLoading || !eventDetails || !venueDetails ? (
+        <h1>Event Loading...</h1>
+      ) : (
+        <EventHeader
+          event={eventDetails}
+          venue={venueDetails}
+          totalPeople={eventMembers?.length}
+        />
+      )}
+      {eventMembersLoading ? (
+        <h1>Members Loading...</h1>
+      ) : (
+        <div className={styles.content}>
+          <MemberList members={eventMembers} />
+        </div>
+      )}
     </div>
   );
 };

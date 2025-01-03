@@ -11,11 +11,6 @@ function Home({ isLoading }) {
   console.log("🚀 ~ Home ~ events:", events);
   const [latestEvent, setLatestEvent] = useState(null);
   const [venueDetails, setVenueDetails] = useState(null);
-  console.log(
-    "🚀 ~ Home ~ venueDetails+++++++++++++ line no 14:",
-    venueDetails
-  );
-
   console.log("🚀 ~ Home ~ latestEvent:", latestEvent);
   useEffect(() => {
     if (events && events?.length > 0) {
@@ -55,21 +50,29 @@ function Home({ isLoading }) {
   return (
     <div>
       <ul className="breadcrumb">
-        <li className="breadcrumb-item">
+        {/* <li className="breadcrumb-item">
           <a href="#/">LAYOUT</a>
-        </li>
+        </li> */}
         <li className="breadcrumb-item active">STARTER PAGE</li>
       </ul>
 
       <section className="mb-5">
         <h2 className="mb-2">Next Upcoming Event</h2>
         {/* <EventCard /> */}
-        <EventCardV2 event={latestEvent} venue={venueDetails} />
+        {!latestEvent ? (
+          <h1>latest event loading</h1>
+        ) : (
+          <EventCardV2 event={latestEvent} venue={venueDetails} />
+        )}
       </section>
 
       <section>
         <h2 className="mb-2">Inner Circle Members</h2>
-        <MemberGrid members={members} />
+        {!members?.length ? (
+          <h1>Memeber loading</h1>
+        ) : (
+          <MemberGrid members={members} />
+        )}
       </section>
     </div>
   );

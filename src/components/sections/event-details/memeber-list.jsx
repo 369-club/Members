@@ -20,7 +20,7 @@ export default function MemberList({ members }) {
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <Link
-                to={`/member/${member?.id}`}
+                to={`/member/${member?.slug}`}
                 className=" position-relative top-0 bottom-0 start-0 end-0 link-underline-opacity-0"
                 style={{ textDecoration: "none" }}
               >
