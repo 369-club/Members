@@ -123,12 +123,13 @@ export default function Profile() {
               rel="noreferrer"
             >
               <Globe size={16} />
-              Visit Website
+              Website
             </a>
 
             <ProfileIntroVideo
               className={styles.link}
               src={profileData.introVideo}
+              name={profileData.name}
             />
           </div>
         </div>

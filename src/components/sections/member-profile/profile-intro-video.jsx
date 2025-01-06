@@ -1,18 +1,18 @@
 "use client";
 import React from "react";
 import styles from "./styles/profile-intro-video.module.css";
-import { Eye, Video } from "lucide-react";
+import { Video } from "lucide-react";
 
-export default function ProfileIntroVideo({ src, className }) {
+export default function ProfileIntroVideo({ src, className, name }) {
   return (
     <div className={styles.container}>
       <button
         type="button"
-        className={`btn border-0 ${className}`}
+        className={`btn d-inline-flex align-items-center border-0 ${className}`}
         data-bs-toggle="modal"
         data-bs-target="#modalCoverExample"
       >
-        <Video size={20} className="me-1" /> Introdunction Video
+        <Video size={18} /> About {name}
       </button>
 
       <div className="modal modal-cover fade" id="modalCoverExample">
