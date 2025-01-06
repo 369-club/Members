@@ -53,7 +53,7 @@ function Home({ isLoading }) {
         {/* <li className="breadcrumb-item">
           <a href="#/">LAYOUT</a>
         </li> */}
-        <li className="breadcrumb-item active">STARTER PAGE</li>
+        <li className="breadcrumb-item active">Home</li>
       </ul>
 
       <section className="mb-5">

@@ -78,7 +78,7 @@ const MemberGrid = ({ members = [] }) => {
                   />
                 ) : (
                   <img
-                    src="/assets/img/avatar4.png"
+                    src="https://placehold.co/600x400?text=Profile"
                     // src="/assets/img/avatar4.png"
                     alt={member?.full_name ?? ""}
                     className={styles.memberImage}

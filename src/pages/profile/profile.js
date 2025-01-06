@@ -55,6 +55,7 @@ export default function Profile() {
   const { members, events, venues } = useFetchData();
   const { memberId } = useParams();
   const [memberProfile, setMemberProfile] = useState(null);
+  const [memberLinks, setMemberLinks] = useState(null);
   const [memberEvents, setMemberEvents] = useState([]);
   const [memberProfileLoading, setMemberProfileLoading] = useState(true);
   const [memberEventsLoading, setMembersEventLoading] = useState(true);
@@ -79,7 +80,32 @@ export default function Profile() {
     },
     [members]
   );
+  const fetchMemberLinks = useCallback(
+    async (memberId) => {
+      setMemberProfileLoading(true);
+      try {
+        const { data: memberLinks, error: membersError } = await supabase
+          .from("MemberLinks")
+          .select("*")
+          .eq("member_id", memberId);
+        if (memberLinks && memberLinks?.length > 0) {
+          setMemberLinks(memberLinks?.[0]);
+        }
+
+        console.log(
+          "🚀 ~ memberLinks:++++++++++++++++ line no 89",
+          memberLinks
+        );
+      } catch (error) {
+        console.error("🚀 ~ fetchMemberProfile ~ error:", error);
+      } finally {
+        setMemberProfileLoading(false);
+      }
+    },
+    [members]
+  );
   const fetchMemberEvents = useCallback(async (memberId) => {
+    console.log("🚀 ~ fetchMemberEvents ~ memberId:", memberId);
     try {
       setMembersEventLoading(true);
       const { data: registrationData, error: registrationError } =
@@ -115,6 +141,7 @@ export default function Profile() {
       setMembersEventLoading(false);
     }
   }, []);
+
   useEffect(() => {
     if (memberId) {
       fetchMemberProfile(memberId);
@@ -123,8 +150,9 @@ export default function Profile() {
   useEffect(() => {
     if (memberProfile?.id) {
       fetchMemberEvents(memberProfile?.id);
+      fetchMemberLinks(memberProfile?.id);
     }
-  }, [memberProfile, fetchMemberProfile]);
+  }, [memberProfile, fetchMemberProfile, fetchMemberLinks]);
 
   const getEventVenue = (venueId) => {
     if (venues && venues?.length > 0) {
@@ -160,7 +188,7 @@ export default function Profile() {
                 />
               ) : (
                 <img
-                  src={"/assets/img/profile-avatar.png"}
+                  src={"https://placehold.co/600x400?text=Profile"}
                   alt={"profile"}
                   className={styles.image}
                   priority
@@ -192,7 +220,15 @@ export default function Profile() {
                 />
                 <ProfileStatCard
                   label="Last Event"
-                  value={profileData?.lastEvent}
+                  value={
+                    memberEvents?.length > 0
+                      ? memberEvents.reduce((latest, event) =>
+                          new Date(event.when) > new Date(latest.when)
+                            ? event
+                            : latest
+                        ).title
+                      : "No Last Event"
+                  }
                   icon={
                     <Calendar
                       size={14}
@@ -201,6 +237,7 @@ export default function Profile() {
                     />
                   }
                 />
+
                 <ProfileStatCard
                   label="Location"
                   value={memberProfile?.location ?? "none"}
@@ -215,19 +252,31 @@ export default function Profile() {
               </div>
 
               <div className="d-flex align-items-center flex-wrap gap-4">
-                <a
-                  href={profileData.website}
-                  className={styles.link}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Globe size={16} />
-                  Visit Website
-                </a>
+                {memberLinks ? (
+                  <a
+                    href={memberLinks?.link}
+                    className={styles.link}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Globe size={16} />
+                    Visit Website
+                  </a>
+                ) : (
+                  <a
+                    href={"#"}
+                    className={styles.link}
+                    // target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Globe size={16} />
+                    No Website
+                  </a>
+                )}
 
                 <ProfileIntroVideo
                   className={styles.link}
-                  src={profileData.introVideo}
+                  src={memberLinks?.video}
                 />
               </div>
             </div>
