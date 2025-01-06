@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 export default function MemberList({ members }) {
   return (
     <div className={styles.membersSection}>
-      <h2 className={styles.sectionTitle}>
+      <h2 className={styles.sectionTitle + " font-info"}>
         <Star size={28} />
         Featured Attendees
       </h2>
@@ -46,7 +46,7 @@ export default function MemberList({ members }) {
                     <h3 className={styles.memberName}>
                       {member?.full_name ?? ""}
                     </h3>
-                    <div className={styles.memberRole}>
+                    <div className={`${styles.memberRole} text-theme`}>
                       <UserCircle size={16} />
                       {member?.tier ?? ""}
                     </div>

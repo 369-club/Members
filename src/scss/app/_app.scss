@@ -1,3 +1,20 @@
 .app {
-	padding-top: $app-header-height;
+  padding-top: $app-header-height;
+}
+
+.header-topnav-bg {
+  backdrop-filter: blur(8px);
+  background: transparent;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1020;
+
+  @include media-breakpoint-up(xl) {
+    & > div > div {
+      margin: 0 -1rem;
+    }
+  }
 }

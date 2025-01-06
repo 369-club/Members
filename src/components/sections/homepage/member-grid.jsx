@@ -78,7 +78,10 @@ const MemberGrid = ({ members = [] }) => {
                   />
                 ) : (
                   <img
-                    src="https://placehold.co/600x400?text=Profile"
+                    src={`https://placehold.co/600x400/152935/BDBDBD?text=${member?.full_name
+                      .split(" ")
+                      .map((word) => word.charAt(0).toUpperCase())
+                      .join("")}`}
                     // src="/assets/img/avatar4.png"
                     alt={member?.full_name ?? ""}
                     className={styles.memberImage}
@@ -86,7 +89,7 @@ const MemberGrid = ({ members = [] }) => {
                 )}
 
                 <h3 className="line-clamp-1">{member?.full_name ?? ""}</h3>
-                <p>{member?.tier ?? ""}</p>
+                <p className="mb-0">{member?.tier ?? ""}</p>
               </div>
             </Link>
           </div>

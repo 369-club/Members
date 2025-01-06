@@ -1,10 +1,13 @@
 .loader-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
   min-height: 200px;
+  position: relative;
+  z-index: 100;
 }
 
 .loader {
@@ -93,6 +96,57 @@
   animation: pulse 2s ease-in-out infinite;
 }
 
+/* Loading text styles */
+.loading-text {
+  margin-top: 20px;
+  font-size: 1.25rem;
+  line-height: 1.625rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.loading-text span {
+  display: inline-block;
+  animation: wave 2s infinite ease-in-out;
+  color: #3cd2a5;
+}
+
+.loading-text span:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.loading-text span:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.loading-text span:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.loading-text span:nth-child(5) {
+  animation-delay: 0.4s;
+}
+.loading-text span:nth-child(6) {
+  animation-delay: 0.5s;
+}
+.loading-text span:nth-child(7) {
+  animation-delay: 0.6s;
+}
+.loading-text span:nth-child(8) {
+  animation-delay: 0.7s;
+}
+.loading-text span:nth-child(9) {
+  animation-delay: 0.8s;
+}
+.loading-text span:nth-child(10) {
+  animation-delay: 0.9s;
+}
+
+.blue .loading-text {
+  color: #00b4d8;
+}
+
+.green .loading-text {
+  color: #3cd2a5;
+}
+
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -149,5 +203,15 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
   }
 }

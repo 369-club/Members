@@ -1,5 +1,5 @@
 .app-content {
-  padding: $app-content-padding-y $app-content-padding-x;
+  padding: $app-content-padding-y 1.25rem;
   flex: 1;
 
   @if $enable-rtl {
@@ -18,7 +18,7 @@
   }
 
   & .app-content-inner-padding {
-    padding: $app-content-padding-y $app-content-padding-x;
+    padding: $app-content-padding-y 1.25rem;
 
     @include media-breakpoint-down(lg) {
       padding: $app-content-sm-padding-y $app-content-sm-padding-x;

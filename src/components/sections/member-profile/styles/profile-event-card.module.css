@@ -8,7 +8,7 @@
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  /* transform: translateY(-5px); */
   background: rgba(255, 255, 255, 0.05);
   /* border-color: rgba(79, 172, 254, 0.2); */
   border-color: rgba(var(--primary-rgb), 0.65);
@@ -45,6 +45,8 @@
   margin: 0.5rem 0;
   color: #fff;
   font-size: 1.25rem;
+  line-height: 1.625rem;
+  min-height: 3.25rem;
 }
 
 .date {

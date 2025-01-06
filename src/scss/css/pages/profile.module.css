@@ -14,22 +14,22 @@
 .header {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 1.25rem;
   margin-bottom: 3rem;
   animation: fadeIn 0.5s ease-in;
 }
 
-@media (min-width: 850px) {
+@media (min-width: 992px) {
   .header {
     grid-template-columns: 400px 1fr;
   }
 }
 
-@media screen and (min-width: 992px) and (max-width: 1150px) {
+/* @media screen and (min-width: 992px) and (max-width: 1150px) {
   .header {
     grid-template-columns: 1fr;
   }
-}
+} */
 
 .info {
   display: flex;
@@ -59,38 +59,51 @@
 .stats {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  gap: 1rem;
+  gap: 0.5rem;
   margin: 1rem 0;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 560px) {
   .stats {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-@media (min-width: 850px) {
-  .stats {
-    grid-template-columns: repeat(1, 1fr);
+  .stats > *:nth-child(3) {
+    grid-column: span 2 / span 2;
   }
 }
 
-@media screen and (min-width: 992px) and (max-width: 1150px) {
-  .stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1280px) {
-  .stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1500px) {
+@media (min-width: 768px) {
   .stats {
     grid-template-columns: repeat(3, 1fr);
   }
+  .stats > *:nth-child(3) {
+    grid-column: span 1 / span 2;
+  }
 }
+@media (min-width: 992px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stats > *:nth-child(3) {
+    grid-column: span 2 / span 2;
+  }
+}
+
+@media (min-width: 1300px) {
+  .stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .stats > *:nth-child(3) {
+    grid-column: span 1 / span 2;
+  }
+}
+
+/* @media (min-width: 1500px) {
+  .stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+} */
 
 .eventsSection {
   margin-top: 3rem;
@@ -99,17 +112,17 @@
 .eventsGrid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  gap: 1rem;
+  gap: 0.75rem;
   margin-top: 1.5rem;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 600px) {
   .eventsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 840px) {
   .eventsGrid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -117,13 +130,13 @@
 
 @media (min-width: 1200px) {
   .eventsGrid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
-@media (min-width: 1500px) {
+@media (min-width: 1660px) {
   .eventsGrid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 

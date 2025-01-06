@@ -12,6 +12,8 @@ export default function EventHeader({ event, venue, totalPeople }) {
       <div className={styles.detailCard}>
         <div className={styles.detailIcon}>
           <Icon size={24} />
+          {/* <div className={styles.detailGlow} /> */}
+          <div className={styles.detailMask} />
         </div>
         <div className={styles.detailText}>
           <span className={styles.detailLabel}>{label}</span>
@@ -43,8 +45,10 @@ export default function EventHeader({ event, venue, totalPeople }) {
       <div className={styles.heroOverlay} />
 
       <div className={styles.eventInfo}>
-        <div className={styles.content}>
-          <h1 className={styles.title}>{event?.title ?? ""}</h1>
+        <div className={"container-xl px-0 px-md-3 px-xl-0"}>
+          <h1 className={styles.title + " font-heading"}>
+            {event?.title ?? ""}
+          </h1>
 
           <div className={styles.detailsGrid}>
             <DetailCard
@@ -61,8 +65,8 @@ export default function EventHeader({ event, venue, totalPeople }) {
               label="Time"
               value={
                 event?.when
-                  ? format(parseISO(event?.when), "hh:mm:ss a")
-                  : "no time"
+                  ? format(parseISO(event?.when), "hh:mm a")
+                  : "No Time"
               }
             />
             <DetailCard

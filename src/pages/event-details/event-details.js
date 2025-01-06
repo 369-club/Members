@@ -6,6 +6,7 @@ import styles from "../../scss/css/pages/event-detail.module.css";
 import { useParams } from "react-router-dom";
 import useFetchData from "../../hooks/fetchData";
 import supabase from "../../utils/supabaseClient";
+import CustomLoader from "../../components/custom-loader";
 
 const EventDetails = () => {
   const context = useContext(AppSettings);
@@ -103,24 +104,25 @@ const EventDetails = () => {
 
     // eslint-disable-next-line
   }, []);
+
+  if (
+    eventDetailsLoading ||
+    !eventDetails ||
+    !venueDetails ||
+    eventMembersLoading
+  )
+    return <CustomLoader gap="250" />;
   return (
     <div className={styles.container}>
-      {eventDetailsLoading || !eventDetails || !venueDetails ? (
-        <h1>Event Loading...</h1>
-      ) : (
-        <EventHeader
-          event={eventDetails}
-          venue={venueDetails}
-          totalPeople={eventMembers?.length}
-        />
-      )}
-      {eventMembersLoading ? (
-        <h1>Members Loading...</h1>
-      ) : (
-        <div className={styles.content}>
-          <MemberList members={eventMembers} />
-        </div>
-      )}
+      <EventHeader
+        event={eventDetails}
+        venue={venueDetails}
+        totalPeople={eventMembers?.length}
+      />
+
+      <div className={"container-xl px-3 p-xl-0"}>
+        <MemberList members={eventMembers} />
+      </div>
     </div>
   );
 };
