@@ -64,7 +64,7 @@ const MemberGrid = ({ members = [] }) => {
             style={{ animationDelay: `${index * 0.08}s` }}
           >
             <Link
-              to={`/member/${member?.id}`}
+              to={`/member/${member?.slug}`}
               className=" position-relative top-0 bottom-0 start-0 end-0 link-underline-opacity-0"
               style={{ textDecoration: "none" }}
             >
@@ -78,7 +78,7 @@ const MemberGrid = ({ members = [] }) => {
                   />
                 ) : (
                   <img
-                    src="/assets/img/avatar4.png"
+                    src="https://placehold.co/600x400?text=Profile"
                     // src="/assets/img/avatar4.png"
                     alt={member?.full_name ?? ""}
                     className={styles.memberImage}
