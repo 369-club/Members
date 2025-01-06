@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { slideToggle } from "./../../composables/slideToggle.js";
+import Logo from "./logo.jsx";
 
 function Header() {
   const notificationData = [];
@@ -46,7 +47,7 @@ function Header() {
 
   return (
     <div id="header" className="app-header">
-      <div className="desktop-toggler">
+      <div className="desktop-toggler d-none">
         <button
           type="button"
           className="menu-toggler"
@@ -58,7 +59,7 @@ function Header() {
         </button>
       </div>
 
-      <div className="mobile-toggler">
+      <div className="mobile-toggler me-0 d-md-none">
         <button
           type="button"
           className="menu-toggler"
@@ -70,16 +71,18 @@ function Header() {
         </button>
       </div>
 
-      <div className="brand">
-        <Link to="/" className="brand-logo">
-          <span className="brand-img">
+      <div className="w-100 d-flex align-items-center justify-content-center">
+        <Link to="/" style={{ textDecoration: "none" }}>
+          {/* <span className="brand-img">
             <span className="brand-img-text text-theme">C</span>
-          </span>
-          <span className="brand-text">Club 369</span>
+          </span> */}
+          {/* <span className="brand-text">Club 369</span> */}
+
+          <Logo />
         </Link>
       </div>
 
-      <div className="menu">
+      {/* <div className="menu">
         <div className="menu-item dropdown">
           <a href="#/" onClick={toggleAppHeaderSearch} className="menu-link">
             <div className="menu-icon">
@@ -87,7 +90,40 @@ function Header() {
             </div>
           </a>
         </div>
-        <div className="menu-item dropdown dropdown-mobile-full">
+      </div> */}
+      {/* <SearchBar toggleAppHeaderSearch={toggleAppHeaderSearch} /> */}
+    </div>
+  );
+}
+
+export default Header;
+
+const SearchBar = ({ toggleAppHeaderSearch }) => {
+  return (
+    <form className="menu-search" method="POST" name="header_search_form">
+      <div className="menu-search-container">
+        <div className="menu-search-icon">
+          <i className="bi bi-search"></i>
+        </div>
+        <div className="menu-search-input">
+          <input
+            type="text"
+            className="form-control form-control-lg"
+            placeholder="Search menu..."
+          />
+        </div>
+        <div className="menu-search-icon">
+          <a href="#/" onClick={toggleAppHeaderSearch}>
+            <i className="bi bi-x-lg"></i>
+          </a>
+        </div>
+      </div>
+    </form>
+  );
+};
+
+/*
+  <div className="menu-item dropdown dropdown-mobile-full">
           <a
             href="#/"
             data-bs-toggle="dropdown"
@@ -278,30 +314,4 @@ function Header() {
               <i className="bi bi-toggle-off ms-auto text-theme fs-16px my-n1"></i>
             </Link>
           </div>
-        </div>
-      </div>
-
-      <form className="menu-search" method="POST" name="header_search_form">
-        <div className="menu-search-container">
-          <div className="menu-search-icon">
-            <i className="bi bi-search"></i>
-          </div>
-          <div className="menu-search-input">
-            <input
-              type="text"
-              className="form-control form-control-lg"
-              placeholder="Search menu..."
-            />
-          </div>
-          <div className="menu-search-icon">
-            <a href="#/" onClick={toggleAppHeaderSearch}>
-              <i className="bi bi-x-lg"></i>
-            </a>
-          </div>
-        </div>
-      </form>
-    </div>
-  );
-}
-
-export default Header;
+        </div> */

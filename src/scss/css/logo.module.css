@@ -1,0 +1,58 @@
+.logo {
+  /* font-weight: 700; */
+  font-size: 1.75rem;
+  line-height: 2.125rem;
+  color: va;
+  text-shadow: 0 0 10px rgba(var(--primary-rgb), 0.7);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  letter-spacing: 2px;
+  font-family: "Rubik Vinyl", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* .text {
+  border-right: 2px solid #00ffff;
+  padding-right: 8px;
+  margin-right: 8px;
+} */
+
+.number {
+  position: relative;
+}
+/* 
+.number::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  top: 50%;
+  height: 2px;
+  background-color: #00ffff;
+  transform: translateY(-50%) skew(-20deg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.logo:hover .number::before {
+  opacity: 1;
+} */
+
+@keyframes pulse {
+  0% {
+    text-shadow: 0 0 10px rgba(var(--primary-rgb), 0.7);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(var(--primary-rgb), 1);
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(var(--primary-rgb), 0.7);
+  }
+}
+
+.logo:hover {
+  animation: pulse 1.5s infinite;
+}

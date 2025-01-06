@@ -1,10 +1,10 @@
 .app-header {
   height: $app-header-height;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: $app-header-zindex;
+  // position: fixed;
+  // top: 0;
+  // left: 0;
+  // right: 0;
+  // z-index: $app-header-zindex;
   background: var(--#{$prefix}app-header-bg);
   display: flex;
   transition: all 0.15s ease-in-out;
@@ -74,9 +74,9 @@
     display: flex;
     align-items: center;
 
-    @include media-breakpoint-down(md) {
-      display: none;
-    }
+    // @include media-breakpoint-down(md) {
+    //   display: none;
+    // }
 
     & .brand-logo {
       text-decoration: none;
@@ -86,9 +86,9 @@
       display: flex;
       align-items: center;
 
-      @include media-breakpoint-down(md) {
-        display: none;
-      }
+      // @include media-breakpoint-down(md) {
+      //   display: none;
+      // }
 
       & img {
         max-width: 100%;
@@ -187,7 +187,8 @@
     left: 0;
     right: 0;
     height: $app-header-height;
-    background: var(--#{$prefix}app-header-bg);
+    // background: var(--#{$prefix}app-header-bg);
+    background: #121722;
     transition: all 0.2s ease-in-out;
 
     & .menu-search-container {

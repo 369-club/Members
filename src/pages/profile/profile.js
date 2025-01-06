@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Calendar, DollarSign, Globe, MapPin } from "lucide-react";
 import styles from "../../scss/css/pages/profile.module.css";
 import TierBadge from "../../components/sections/member-profile/tier-badge";
@@ -9,49 +9,13 @@ import ProfileEventCard from "../../components/sections/member-profile/profile-e
 import useFetchData from "../../hooks/fetchData";
 import { useParams } from "react-router-dom";
 import supabase from "../../utils/supabaseClient";
-
-const profileData = {
-  name: "Alex Morgan",
-  slug: "alex-morgan",
-  picture: "/placeholder.svg?height=300&width=300",
-  about:
-    "Passionate club member with a keen interest in community events and social gatherings.",
-  introVideo: "https://example.com/intro-video.mp4",
-  tier: "Platinum",
-  totalSpent: 15000,
-  lastEvent: "Summer Gala 2023",
-  website: "https://alexmorgan.com",
-  location: "New York, NY",
-  recentEvents: [
-    {
-      title: "Summer Gala 2023",
-      date: "Aug 15, 2023",
-      description:
-        "Annual summer celebration with live music and gourmet dining",
-      image: "/assets/img/dummy-event3.png",
-    },
-    {
-      title: "Tech Conference",
-      date: "Jul 22, 2023",
-      description: "Exploring the latest in technology and innovation",
-      image: "/assets/img/dummy-event5.png",
-    },
-    {
-      title: "Charity Golf Tournament",
-      date: "Jun 10, 2023",
-      description: "Annual charity golf event supporting local communities",
-      image: "/assets/img/dummy-event4.png",
-    },
-    {
-      title: "Elegant Celebration",
-      date: "Jun 10, 2023",
-      description: "Annual Celebration of our perfomance on work",
-      image: "/assets/img/dummy-event1.png",
-    },
-  ],
-};
+import { AppSettings } from "../../config/app-settings";
+import CustomLoader from "../../components/custom-loader.jsx";
+import EmptyEvents from "../../components/sections/member-profile/empty-events.jsx";
+import EmptyDescription from "../../components/sections/member-profile/empty-description.jsx";
 
 export default function Profile() {
+  const context = useContext(AppSettings);
   const { members, events, venues } = useFetchData();
   const { memberId } = useParams();
   const [memberProfile, setMemberProfile] = useState(null);
@@ -154,6 +118,13 @@ export default function Profile() {
     }
   }, [memberProfile, fetchMemberProfile, fetchMemberLinks]);
 
+  useEffect(() => {
+    context.setAppTopNav(true);
+    context.setAppSidebarNone(true);
+
+    // eslint-disable-next-line
+  }, []);
+
   const getEventVenue = (venueId) => {
     if (venues && venues?.length > 0) {
       const matchedVenue = venues?.find((venue) => venue.id === venueId);
@@ -162,12 +133,15 @@ export default function Profile() {
     return null;
   };
 
+  if (memberProfileLoading || !memberProfile || memberEventsLoading)
+    return <CustomLoader gap="200" />;
+
   return (
-    <div>
+    <div className="container-xl p-0">
       <ul className="breadcrumb">
-        {/* <li className="breadcrumb-item">
-          <a href="#">LAYOUT</a>
-        </li> */}
+        <li className="breadcrumb-item">
+          <a href="/">Home</a>
+        </li>
         <li className="breadcrumb-item active">Profile</li>
       </ul>
       {memberProfileLoading || !memberProfile ? (
@@ -188,7 +162,10 @@ export default function Profile() {
                 />
               ) : (
                 <img
-                  src={"https://placehold.co/600x400?text=Profile"}
+                  src={`https://placehold.co/600x400?text=${memberProfile?.full_name
+                    .split(" ")
+                    .map((word) => word.charAt(0).toUpperCase())
+                    .join("")}`}
                   alt={"profile"}
                   className={styles.image}
                   priority
@@ -210,13 +187,7 @@ export default function Profile() {
                 <ProfileStatCard
                   label="Total Spent"
                   value={memberProfile?.total_spent ?? 0}
-                  icon={
-                    <DollarSign
-                      size={14}
-                      style={{ marginTop: "2px" }}
-                      className="text-theme"
-                    />
-                  }
+                  icon={<DollarSign size={14} className="text-theme" />}
                 />
                 <ProfileStatCard
                   label="Last Event"
@@ -229,25 +200,13 @@ export default function Profile() {
                         ).title
                       : "No Last Event"
                   }
-                  icon={
-                    <Calendar
-                      size={14}
-                      style={{ marginTop: "2px" }}
-                      className="text-theme"
-                    />
-                  }
+                  icon={<Calendar size={14} className="text-theme" />}
                 />
 
                 <ProfileStatCard
                   label="Location"
                   value={memberProfile?.location ?? "none"}
-                  icon={
-                    <MapPin
-                      size={14}
-                      style={{ marginTop: "2px" }}
-                      className="text-theme"
-                    />
-                  }
+                  icon={<MapPin size={14} className="text-theme" />}
                 />
               </div>
 
@@ -263,57 +222,54 @@ export default function Profile() {
                     Visit Website
                   </a>
                 ) : (
-                  <a
-                    href={"#"}
-                    className={styles.link}
-                    // target="_blank"
-                    rel="noreferrer"
-                  >
+                  <span className={styles.link}>
                     <Globe size={16} />
                     No Website
-                  </a>
+                  </span>
                 )}
 
                 <ProfileIntroVideo
                   className={styles.link}
                   src={memberLinks?.video}
+                  name={memberProfile?.full_name}
                 />
               </div>
             </div>
           </div>
 
           <div className="">
-            <h3 className="mb-2">About</h3>
+            <h2 className="font-info mb-2">About</h2>
             <p className={`${styles.about} mb-0`}>
               {" "}
-              {memberProfile?.about ?? "No Information"}
+              {memberProfile?.about ? (
+                memberProfile?.about
+              ) : (
+                <EmptyDescription />
+              )}
             </p>
           </div>
         </>
       )}
 
       <div className={styles.eventsSection}>
-        <h2>Recent Events</h2>
-        {memberEventsLoading ? (
-          <h1>Events Loading</h1>
-        ) : (
+        <h2 className="font-info">Recent Events</h2>
+
+        {memberEvents && memberEvents?.length > 0 ? (
           <div className={styles.eventsGrid}>
-            {memberEvents && memberEvents?.length > 0 ? (
-              memberEvents?.map((event, index) => (
-                <ProfileEventCard
-                  key={index}
-                  id={event.id}
-                  index={index}
-                  title={event?.title}
-                  date={event?.when}
-                  venue={getEventVenue(event?.venue_id)}
-                  image={event?.profile_picture}
-                />
-              ))
-            ) : (
-              <h1>No Events found </h1>
-            )}
+            {memberEvents?.map((event, index) => (
+              <ProfileEventCard
+                key={index}
+                id={event.id}
+                index={index}
+                title={event?.title}
+                date={event?.when}
+                venue={getEventVenue(event?.venue_id)}
+                image={event?.profile_picture}
+              />
+            ))}
           </div>
+        ) : (
+          <EmptyEvents />
         )}
       </div>
     </div>
