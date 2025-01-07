@@ -4,10 +4,14 @@ import useFetchData from "../../hooks/fetchData";
 import CustomLoader from "../../components/custom-loader";
 import { EventCard } from "../../components/sections/calendar/event-card";
 import "../../scss/css/pages/calendar.scss";
+import { useContext, useEffect } from "react";
+import { AppSettings } from "../../config/app-settings";
 
 const events = [{ title: "Meeting", start: new Date() }];
 
 function Calendar() {
+  const context = useContext(AppSettings);
+
   const { events: fetchedEvents } = useFetchData();
   const events =
     fetchedEvents?.map((event) => ({
@@ -16,6 +20,13 @@ function Calendar() {
     })) || [];
 
   console.log("🚀 ~ Calendar ~ events:++++++++++++++++ line no 9", events);
+
+  useEffect(() => {
+    context.setAppTopNav(true);
+    context.setAppSidebarNone(true);
+
+    // eslint-disable-next-line
+  }, []);
 
   if (!fetchedEvents?.length) return <CustomLoader gap="200" />;
 
