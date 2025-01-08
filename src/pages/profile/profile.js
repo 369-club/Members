@@ -162,7 +162,7 @@ export default function Profile() {
                 />
               ) : (
                 <img
-                  src={`https://placehold.co/600x400?text=${memberProfile?.full_name
+                  src={`https://placehold.co/600x400/1f2b35/BDBDBD?text=${memberProfile?.full_name
                     .split(" ")
                     .map((word) => word.charAt(0).toUpperCase())
                     .join("")}`}

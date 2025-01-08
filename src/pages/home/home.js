@@ -53,12 +53,12 @@ function Home({ isLoading }) {
 
   return (
     <div className="container-xl p-0">
-      <ul className="breadcrumb">
-        {/* <li className="breadcrumb-item">
+      {/* <ul className="breadcrumb">
+        <li className="breadcrumb-item">
           <a href="#/">LAYOUT</a>
-        </li> */}
+        </li>
         <li className="breadcrumb-item active font-geist">Home</li>
-      </ul>
+      </ul> */}
 
       <section className="mb-5">
         <h2 className="mb-2 font-info">Next Upcoming Event</h2>

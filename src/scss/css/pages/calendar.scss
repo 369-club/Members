@@ -1,0 +1,88 @@
+.event-calendar {
+  //   min-width: 700px;
+
+  .fc {
+    // min-width: 700px;
+    .fc-header-toolbar .fc-toolbar-chunk {
+      &:nth-child(1) {
+        width: fit-content;
+        border: 0;
+        font-family: var(--font-info);
+        color: var(--primary);
+      }
+
+      &:nth-child(2) {
+        display: none;
+      }
+
+      &:nth-child(3) {
+        margin-inline-start: auto;
+        flex: 0;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        .fc-today-button {
+          text-transform: capitalize;
+        }
+      }
+    }
+
+    .fc-scrollgrid-section {
+      > td {
+        border: 0;
+      }
+    }
+    table {
+      border: 0 !important;
+    }
+
+    th {
+      border-color: rgba(var(--primary-rgb), 0.3) !important;
+      border: 0;
+      &.fc-day {
+        padding: 0.5rem;
+        color: var(--primary);
+      }
+      border-radius: 0.5rem;
+    }
+
+    table.fc-scrollgrid-sync-table {
+      border-collapse: separate;
+      border-spacing: 0.35rem;
+    }
+
+    td {
+      min-width: 200px;
+      border-radius: 0.5rem;
+      // border-color: rgba(var(--primary-rgb), 0.15) !important;
+      border-color: #313c4b !important;
+    }
+
+    .fc-daygrid-day-top {
+      flex-direction: row;
+      color: rgba(255, 255, 255, 0.7);
+      font-family: var(--font-heading);
+    }
+
+    .fc-view {
+      .fc-event {
+        &.fc-daygrid-dot-event {
+          background-color: transparent !important;
+        }
+      }
+    }
+  }
+}
+
+.fc-direction-ltr {
+  .fc-daygrid-event {
+    &.fc-event-start {
+      // margin-right: 4px
+      margin-inline-end: 4px;
+    }
+
+    &.fc-event-end {
+      margin-inline-start: 4px;
+    }
+  }
+}
