@@ -72,7 +72,7 @@ function Header() {
       </div>
 
       <div className="w-100 d-flex align-items-center justify-content-center">
-        <Link to="/" style={{ textDecoration: "none" }}>
+        <Link to="/home" style={{ textDecoration: "none" }}>
           {/* <span className="brand-img">
             <span className="brand-img-text text-theme">C</span>
           </span> */}
