@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import useFetchData from "../../hooks/fetchData";
 import supabase from "../../utils/supabaseClient";
 import CustomLoader from "../../components/custom-loader";
+import Seo from "../../utils/seo";
 
 const EventDetails = () => {
   const context = useContext(AppSettings);
@@ -113,17 +114,20 @@ const EventDetails = () => {
   )
     return <CustomLoader gap="250" />;
   return (
-    <div className={styles.container}>
-      <EventHeader
-        event={eventDetails}
-        venue={venueDetails}
-        totalPeople={eventMembers?.length}
-      />
+    <>
+      <Seo title={eventDetails?.title} />
+      <div className={styles.container}>
+        <EventHeader
+          event={eventDetails}
+          venue={venueDetails}
+          totalPeople={eventMembers?.length}
+        />
 
-      <div className={"container-xl px-3 p-xl-0"}>
-        <MemberList members={eventMembers} />
+        <div className={"container-xl px-3 p-xl-0"}>
+          <MemberList members={eventMembers} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

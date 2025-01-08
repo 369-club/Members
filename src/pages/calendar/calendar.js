@@ -6,6 +6,7 @@ import { EventCard } from "../../components/sections/calendar/event-card";
 import "../../scss/css/pages/calendar.scss";
 import { useContext, useEffect } from "react";
 import { AppSettings } from "../../config/app-settings";
+import Seo from "../../utils/seo";
 
 const events = [{ title: "Meeting", start: new Date() }];
 
@@ -31,15 +32,18 @@ function Calendar() {
   if (!fetchedEvents?.length) return <CustomLoader gap="200" />;
 
   return (
-    <div className="container-xl px-0 event-calendar">
-      <FullCalendar
-        plugins={[dayGridPlugin]}
-        initialView="dayGridMonth"
-        weekends={false}
-        events={events}
-        eventContent={renderEventContent}
-      />
-    </div>
+    <>
+      <Seo title={"Calendar"} />
+      <div className="container-xl px-0 event-calendar">
+        <FullCalendar
+          plugins={[dayGridPlugin]}
+          initialView="dayGridMonth"
+          weekends={false}
+          events={events}
+          eventContent={renderEventContent}
+        />
+      </div>
+    </>
   );
 }
 

@@ -63,6 +63,7 @@
     "react-datepicker": "^6.2.0",
     "react-datetime": "^3.2.0",
     "react-dom": "^18.2.0",
+    "react-helmet-async": "^2.0.5",
     "react-highlight": "^0.15.0",
     "react-input-mask": "^2.0.4",
     "react-perfect-scrollbar": "^1.5.8",

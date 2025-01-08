@@ -5,6 +5,7 @@ import EventCardV2 from "../../components/sections/homepage/event-card-v2";
 import supabase from "../../utils/supabaseClient";
 import useFetchData from "../../hooks/fetchData";
 import { AppSettings } from "../../config/app-settings";
+import Seo from "../../utils/seo";
 
 function Home({ isLoading }) {
   const context = useContext(AppSettings);
@@ -52,33 +53,36 @@ function Home({ isLoading }) {
   if (!members?.length || !latestEvent) return <CustomLoader gap="200" />;
 
   return (
-    <div className="container-xl p-0">
-      {/* <ul className="breadcrumb">
+    <>
+      <Seo title={"Home"} description={"Club 369"} />
+      <div className="container-xl p-0">
+        {/* <ul className="breadcrumb">
         <li className="breadcrumb-item">
           <a href="#/">LAYOUT</a>
         </li>
         <li className="breadcrumb-item active font-geist">Home</li>
       </ul> */}
 
-      <section className="mb-5">
-        <h2 className="mb-2 font-info">Next Upcoming Event</h2>
-        {/* <EventCard /> */}
-        {/* {!latestEvent ? (
+        <section className="mb-5">
+          <h2 className="mb-2 font-info">Next Upcoming Event</h2>
+          {/* <EventCard /> */}
+          {/* {!latestEvent ? (
           <CustomLoader gap="80" />
         ) : (
         )} */}
-        <EventCardV2 event={latestEvent} venue={venueDetails} />
-      </section>
+          <EventCardV2 event={latestEvent} venue={venueDetails} />
+        </section>
 
-      <section>
-        <h2 className="mb-2 font-info">Inner Circle Members</h2>
-        {/* {!members?.length ? (
+        <section>
+          <h2 className="mb-2 font-info">Inner Circle Members</h2>
+          {/* {!members?.length ? (
           <CustomLoader gap="100" />
         ) : (
         )} */}
-        <MemberGrid members={members} />
-      </section>
-    </div>
+          <MemberGrid members={members} />
+        </section>
+      </div>
+    </>
   );
 }
 

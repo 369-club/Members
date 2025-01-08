@@ -13,6 +13,7 @@ import { AppSettings } from "../../config/app-settings";
 import CustomLoader from "../../components/custom-loader.jsx";
 import EmptyEvents from "../../components/sections/member-profile/empty-events.jsx";
 import EmptyDescription from "../../components/sections/member-profile/empty-description.jsx";
+import Seo from "../../utils/seo.js";
 
 export default function Profile() {
   const context = useContext(AppSettings);
@@ -137,141 +138,147 @@ export default function Profile() {
     return <CustomLoader gap="200" />;
 
   return (
-    <div className="container-xl p-0">
-      <ul className="breadcrumb">
-        <li className="breadcrumb-item">
-          <a href="/">Home</a>
-        </li>
-        <li className="breadcrumb-item active">Profile</li>
-      </ul>
-      {memberProfileLoading || !memberProfile ? (
-        <h1>Member Loading</h1>
-      ) : (
-        <>
-          <div className={styles.header}>
-            {/* <ProfileImage src={profileData.picture} alt={profileData.name} />
-             */}
-
-            <div className={styles.profileContainer}>
-              {memberProfile && memberProfile?.profile_picture ? (
-                <img
-                  src={memberProfile?.profile_picture}
-                  alt={"profile"}
-                  className={styles.image}
-                  priority
-                />
-              ) : (
-                <img
-                  src={`https://placehold.co/600x400/1f2b35/BDBDBD?text=${memberProfile?.full_name
-                    .split(" ")
-                    .map((word) => word.charAt(0).toUpperCase())
-                    .join("")}`}
-                  alt={"profile"}
-                  className={styles.image}
-                  priority
-                />
-              )}
-            </div>
-
-            <div className={styles.info}>
-              <div>
-                <h1 className={`${styles.name} mb-2`}>
-                  {memberProfile?.full_name ?? ""}
-                </h1>
-                <TierBadge tier={memberProfile?.tier ?? ""} />
-              </div>
-
-              {/* <p className={`${styles.about} mb-0`}> {profileData.about}</p> */}
-
-              <div className={`${styles.stats} stats`}>
-                <ProfileStatCard
-                  label="Total Spent"
-                  value={memberProfile?.total_spent ?? 0}
-                  icon={<DollarSign size={14} className="text-theme" />}
-                />
-                <ProfileStatCard
-                  label="Last Event"
-                  value={
-                    memberEvents?.length > 0
-                      ? memberEvents.reduce((latest, event) =>
-                          new Date(event.when) > new Date(latest.when)
-                            ? event
-                            : latest
-                        ).title
-                      : "No Last Event"
-                  }
-                  icon={<Calendar size={14} className="text-theme" />}
-                />
-
-                <ProfileStatCard
-                  label="Location"
-                  value={memberProfile?.location ?? "none"}
-                  icon={<MapPin size={14} className="text-theme" />}
-                />
-              </div>
-
-              <div className="d-flex align-items-center flex-wrap gap-4">
-                {memberLinks ? (
-                  <a
-                    href={memberLinks?.link}
-                    className={styles.link}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <Globe size={16} />
-                    Visit Website
-                  </a>
-                ) : (
-                  <span className={styles.link}>
-                    <Globe size={16} />
-                    No Website
-                  </span>
-                )}
-
-                <ProfileIntroVideo
-                  className={styles.link}
-                  src={memberLinks?.video}
-                  name={memberProfile?.full_name}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="">
-            <h2 className="font-info mb-2">About</h2>
-            <p className={`${styles.about} mb-0`}>
-              {" "}
-              {memberProfile?.about ? (
-                memberProfile?.about
-              ) : (
-                <EmptyDescription />
-              )}
-            </p>
-          </div>
-        </>
-      )}
-
-      <div className={styles.eventsSection}>
-        <h2 className="font-info">Recent Events</h2>
-
-        {memberEvents && memberEvents?.length > 0 ? (
-          <div className={styles.eventsGrid}>
-            {memberEvents?.map((event, index) => (
-              <ProfileEventCard
-                key={index}
-                id={event.id}
-                index={index}
-                title={event?.title}
-                date={event?.when}
-                venue={getEventVenue(event?.venue_id)}
-                image={event?.profile_picture}
-              />
-            ))}
-          </div>
+    <>
+      <Seo
+        title={memberProfile?.full_name}
+        description={memberProfile?.about}
+      />
+      <div className="container-xl p-0">
+        <ul className="breadcrumb">
+          <li className="breadcrumb-item">
+            <a href="/">Home</a>
+          </li>
+          <li className="breadcrumb-item active">Profile</li>
+        </ul>
+        {memberProfileLoading || !memberProfile ? (
+          <h1>Member Loading</h1>
         ) : (
-          <EmptyEvents />
+          <>
+            <div className={styles.header}>
+              {/* <ProfileImage src={profileData.picture} alt={profileData.name} />
+               */}
+
+              <div className={styles.profileContainer}>
+                {memberProfile && memberProfile?.profile_picture ? (
+                  <img
+                    src={memberProfile?.profile_picture}
+                    alt={"profile"}
+                    className={styles.image}
+                    priority
+                  />
+                ) : (
+                  <img
+                    src={`https://placehold.co/600x400/1f2b35/BDBDBD?text=${memberProfile?.full_name
+                      .split(" ")
+                      .map((word) => word.charAt(0).toUpperCase())
+                      .join("")}`}
+                    alt={"profile"}
+                    className={styles.image}
+                    priority
+                  />
+                )}
+              </div>
+
+              <div className={styles.info}>
+                <div>
+                  <h1 className={`${styles.name} mb-2`}>
+                    {memberProfile?.full_name ?? ""}
+                  </h1>
+                  <TierBadge tier={memberProfile?.tier ?? ""} />
+                </div>
+
+                {/* <p className={`${styles.about} mb-0`}> {profileData.about}</p> */}
+
+                <div className={`${styles.stats} stats`}>
+                  <ProfileStatCard
+                    label="Total Spent"
+                    value={memberProfile?.total_spent ?? 0}
+                    icon={<DollarSign size={14} className="text-theme" />}
+                  />
+                  <ProfileStatCard
+                    label="Last Event"
+                    value={
+                      memberEvents?.length > 0
+                        ? memberEvents.reduce((latest, event) =>
+                            new Date(event.when) > new Date(latest.when)
+                              ? event
+                              : latest
+                          ).title
+                        : "No Last Event"
+                    }
+                    icon={<Calendar size={14} className="text-theme" />}
+                  />
+
+                  <ProfileStatCard
+                    label="Location"
+                    value={memberProfile?.location ?? "none"}
+                    icon={<MapPin size={14} className="text-theme" />}
+                  />
+                </div>
+
+                <div className="d-flex align-items-center flex-wrap gap-4">
+                  {memberLinks ? (
+                    <a
+                      href={memberLinks?.link}
+                      className={styles.link}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Globe size={16} />
+                      Visit Website
+                    </a>
+                  ) : (
+                    <span className={styles.link}>
+                      <Globe size={16} />
+                      No Website
+                    </span>
+                  )}
+
+                  <ProfileIntroVideo
+                    className={styles.link}
+                    src={memberLinks?.video}
+                    name={memberProfile?.full_name}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="">
+              <h2 className="font-info mb-2">About</h2>
+              <p className={`${styles.about} mb-0`}>
+                {" "}
+                {memberProfile?.about ? (
+                  memberProfile?.about
+                ) : (
+                  <EmptyDescription />
+                )}
+              </p>
+            </div>
+          </>
         )}
+
+        <div className={styles.eventsSection}>
+          <h2 className="font-info">Recent Events</h2>
+
+          {memberEvents && memberEvents?.length > 0 ? (
+            <div className={styles.eventsGrid}>
+              {memberEvents?.map((event, index) => (
+                <ProfileEventCard
+                  key={index}
+                  id={event.id}
+                  index={index}
+                  title={event?.title}
+                  date={event?.when}
+                  venue={getEventVenue(event?.venue_id)}
+                  image={event?.profile_picture}
+                />
+              ))}
+            </div>
+          ) : (
+            <EmptyEvents />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
