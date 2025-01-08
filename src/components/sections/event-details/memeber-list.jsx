@@ -35,7 +35,10 @@ export default function MemberList({ members }) {
                       />
                     ) : (
                       <img
-                        src="/assets/img/avatar4.png"
+                        src={`https://placehold.co/600x400/161f33/BDBDBD?text=${member?.full_name
+                          .split(" ")
+                          .map((word) => word.charAt(0).toUpperCase())
+                          .join("")}`}
                         fill
                         alt={member?.full_name ?? ""}
                         className={styles.memberImage}

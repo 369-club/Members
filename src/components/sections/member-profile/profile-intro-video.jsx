@@ -18,9 +18,9 @@ export default function ProfileIntroVideo({ src, className, name }) {
             <Video size={20} className="me-1" /> About {name}
           </>
         ) : (
-          <>
-            <Video size={20} className="me-1 text-muted" /> No Video Available
-          </>
+          <span className="opacity-50">
+            <Video size={20} className="me-1" /> No Video Available
+          </span>
         )}
       </button>
 
