@@ -5,16 +5,6 @@ import styles from "./styles/event-card-v2.module.css";
 import { Link } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 
-const nextEvent = {
-  name: "Summer Gala",
-  date: "2023-07-15",
-  time: "7:00 PM",
-  location: "Grand Ballroom",
-  description:
-    "Join us for an elegant evening of dinner, dancing, and fundraising for our annual charity event.",
-  image: "/assets/img/event1.png",
-};
-
 const EventCardV2 = ({ event, venue }) => {
   return (
     <div className={styles.eventCard}>
@@ -47,7 +37,9 @@ const EventCardV2 = ({ event, venue }) => {
           />
 
           <div className={"position-relative"} style={{ zIndex: 1 }}>
-            <h3 className={styles.title}>{event?.title ?? ""}</h3>
+            <h3 className={`${styles.title} font-heading`}>
+              {event?.title ?? ""}
+            </h3>
             <div className={styles.infoContainer}>
               <p className={styles.infoItem}>
                 <CalendarDays className={styles.icon} />

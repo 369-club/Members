@@ -1,29 +1,10 @@
 :root {
-  --teal: #249d79;
-  --primary: #249d79;
-  --primary-rgb: 36, 157, 121;
+  --teal: #3cd2a5;
+  --primary: #3cd2a5;
+  --primary-rgb: 60, 210, 165;
   --deep-teal-gradient: linear-gradient(56deg, #152935 34%, #1d3645 101%);
   /* --deep-teal-gradient: rgba(26, 43, 52, 0.8); */
-}
-
-/* Glass Effect Card */
-.card-glass {
-  background-color: rgba(26, 43, 52, 0.8);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-/* Dark Slate Card */
-.card-slate {
-  background-color: #1c2834;
-}
-
-/* Gradient Accent Card */
-.card-gradient-accent {
-  background: linear-gradient(135deg, #162029 0%, #1a2b34 50%, #203440 100%);
-}
-
-/* Darkest Card */
-.card-dark {
-  background-color: #121920;
+  --fc-today-bg-color: rgba(60, 210, 165, 0.15);
+  --font-heading: "Nunito", serif;
+  --font-info: "Orbitron", serif;
 }

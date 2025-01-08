@@ -6,23 +6,22 @@ import styles from "../../scss/css/pages/event-detail.module.css";
 import { useParams } from "react-router-dom";
 import useFetchData from "../../hooks/fetchData";
 import supabase from "../../utils/supabaseClient";
+import CustomLoader from "../../components/custom-loader";
+import Seo from "../../utils/seo";
 
 const EventDetails = () => {
   const context = useContext(AppSettings);
   const { eventId } = useParams();
   const { events, venues } = useFetchData();
   const [eventDetails, setEventDetails] = useState(null);
-  console.log("🚀 ~ EventDetails ~ eventDetails:", eventDetails);
   const [venueDetails, setVenueDetails] = useState(null);
-  console.log("🚀 ~ EventDetails ~ venueDetails:", venueDetails);
   const [eventMembers, setEventMembers] = useState([]);
-  console.log(
-    "🚀 ~ EventDetails ~ eventMembers++++++++ line no 69:",
-    eventMembers
-  );
+  const [eventDetailsLoading, setEventDetailsLoading] = useState(true);
+  const [eventMembersLoading, setEventMembersLoading] = useState(true);
 
   const fetchEventDetail = useCallback(
     async (eventId) => {
+      setEventDetailsLoading(true);
       try {
         if (eventId && events?.length > 0) {
           const newId = eventId;
@@ -45,12 +44,15 @@ const EventDetails = () => {
       } catch (error) {
         console.error("🚀 ~ fetchEventDetail ~ error:", error);
         // TODO(tanzeel): delete this line, or fix it? setError("Failed to fetch event details.");
+      } finally {
+        setEventDetailsLoading(false);
       }
     },
     [events, venues]
   );
 
   const fetchEventMembers = useCallback(async (eventId) => {
+    setEventMembersLoading(true);
     try {
       const { data: registrationData, error: registrationError } =
         await supabase
@@ -81,6 +83,8 @@ const EventDetails = () => {
       }
     } catch (error) {
       console.error("Error in fetchEventMembers:", error);
+    } finally {
+      setEventMembersLoading(false);
     }
   }, []);
 
@@ -101,17 +105,29 @@ const EventDetails = () => {
 
     // eslint-disable-next-line
   }, []);
+
+  if (
+    eventDetailsLoading ||
+    !eventDetails ||
+    !venueDetails ||
+    eventMembersLoading
+  )
+    return <CustomLoader gap="250" />;
   return (
-    <div className={styles.container}>
-      <EventHeader
-        event={eventDetails}
-        venue={venueDetails}
-        totalPeople={eventMembers?.length}
-      />
-      <div className={styles.content}>
-        <MemberList members={eventMembers} />
+    <>
+      <Seo title={eventDetails?.title} />
+      <div className={styles.container}>
+        <EventHeader
+          event={eventDetails}
+          venue={venueDetails}
+          totalPeople={eventMembers?.length}
+        />
+
+        <div className={"container-xl px-3 p-xl-0"}>
+          <MemberList members={eventMembers} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

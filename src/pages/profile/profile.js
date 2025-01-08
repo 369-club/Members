@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Calendar, DollarSign, Globe, MapPin } from "lucide-react";
 import styles from "../../scss/css/pages/profile.module.css";
 import TierBadge from "../../components/sections/member-profile/tier-badge";
@@ -9,60 +9,29 @@ import ProfileEventCard from "../../components/sections/member-profile/profile-e
 import useFetchData from "../../hooks/fetchData";
 import { useParams } from "react-router-dom";
 import supabase from "../../utils/supabaseClient";
-
-const profileData = {
-  name: "Alex Morgan",
-  slug: "alex-morgan",
-  picture: "/placeholder.svg?height=300&width=300",
-  about:
-    "Passionate club member with a keen interest in community events and social gatherings.",
-  introVideo: "https://example.com/intro-video.mp4",
-  tier: "Platinum",
-  totalSpent: 15000,
-  lastEvent: "Summer Gala 2023",
-  website: "https://alexmorgan.com",
-  location: "New York, NY",
-  recentEvents: [
-    {
-      title: "Summer Gala 2023",
-      date: "Aug 15, 2023",
-      description:
-        "Annual summer celebration with live music and gourmet dining",
-      image: "/assets/img/dummy-event3.png",
-    },
-    {
-      title: "Tech Conference",
-      date: "Jul 22, 2023",
-      description: "Exploring the latest in technology and innovation",
-      image: "/assets/img/dummy-event5.png",
-    },
-    {
-      title: "Charity Golf Tournament",
-      date: "Jun 10, 2023",
-      description: "Annual charity golf event supporting local communities",
-      image: "/assets/img/dummy-event4.png",
-    },
-    {
-      title: "Elegant Celebration",
-      date: "Jun 10, 2023",
-      description: "Annual Celebration of our perfomance on work",
-      image: "/assets/img/dummy-event1.png",
-    },
-  ],
-};
+import { AppSettings } from "../../config/app-settings";
+import CustomLoader from "../../components/custom-loader.jsx";
+import EmptyEvents from "../../components/sections/member-profile/empty-events.jsx";
+import EmptyDescription from "../../components/sections/member-profile/empty-description.jsx";
+import Seo from "../../utils/seo.js";
 
 export default function Profile() {
+  const context = useContext(AppSettings);
   const { members, events, venues } = useFetchData();
   const { memberId } = useParams();
   const [memberProfile, setMemberProfile] = useState(null);
+  const [memberLinks, setMemberLinks] = useState(null);
   const [memberEvents, setMemberEvents] = useState([]);
+  const [memberProfileLoading, setMemberProfileLoading] = useState(true);
+  const [memberEventsLoading, setMembersEventLoading] = useState(true);
   const fetchMemberProfile = useCallback(
     async (memberId) => {
+      setMemberProfileLoading(true);
       try {
         if (memberId && members?.length > 0) {
           // Filter members by slug
           const matchedMember = members.find(
-            (member) => member.id === memberId
+            (member) => member.slug === memberId
           );
           if (matchedMember) {
             setMemberProfile(matchedMember);
@@ -70,12 +39,40 @@ export default function Profile() {
         }
       } catch (error) {
         console.error("🚀 ~ fetchMemberProfile ~ error:", error);
+      } finally {
+        setMemberProfileLoading(false);
+      }
+    },
+    [members]
+  );
+  const fetchMemberLinks = useCallback(
+    async (memberId) => {
+      setMemberProfileLoading(true);
+      try {
+        const { data: memberLinks, error: membersError } = await supabase
+          .from("MemberLinks")
+          .select("*")
+          .eq("member_id", memberId);
+        if (memberLinks && memberLinks?.length > 0) {
+          setMemberLinks(memberLinks?.[0]);
+        }
+
+        console.log(
+          "🚀 ~ memberLinks:++++++++++++++++ line no 89",
+          memberLinks
+        );
+      } catch (error) {
+        console.error("🚀 ~ fetchMemberProfile ~ error:", error);
+      } finally {
+        setMemberProfileLoading(false);
       }
     },
     [members]
   );
   const fetchMemberEvents = useCallback(async (memberId) => {
+    console.log("🚀 ~ fetchMemberEvents ~ memberId:", memberId);
     try {
+      setMembersEventLoading(true);
       const { data: registrationData, error: registrationError } =
         await supabase
           .from("EventRegistrations")
@@ -105,14 +102,30 @@ export default function Profile() {
       }
     } catch (error) {
       console.error("Error in fetchEventMembers:", error);
+    } finally {
+      setMembersEventLoading(false);
     }
   }, []);
+
   useEffect(() => {
     if (memberId) {
       fetchMemberProfile(memberId);
-      fetchMemberEvents(memberId);
     }
   }, [memberId, fetchMemberProfile]);
+  useEffect(() => {
+    if (memberProfile?.id) {
+      fetchMemberEvents(memberProfile?.id);
+      fetchMemberLinks(memberProfile?.id);
+    }
+  }, [memberProfile, fetchMemberProfile, fetchMemberLinks]);
+
+  useEffect(() => {
+    context.setAppTopNav(true);
+    context.setAppSidebarNone(true);
+
+    // eslint-disable-next-line
+  }, []);
+
   const getEventVenue = (venueId) => {
     if (venues && venues?.length > 0) {
       const matchedVenue = venues?.find((venue) => venue.id === venueId);
@@ -121,130 +134,151 @@ export default function Profile() {
     return null;
   };
 
+  if (memberProfileLoading || !memberProfile || memberEventsLoading)
+    return <CustomLoader gap="200" />;
+
   return (
-    <div>
-      <ul className="breadcrumb">
-        <li className="breadcrumb-item">
-          <a href="#">LAYOUT</a>
-        </li>
-        <li className="breadcrumb-item active">Profile</li>
-      </ul>
+    <>
+      <Seo
+        title={memberProfile?.full_name}
+        description={memberProfile?.about}
+      />
+      <div className="container-xl p-0">
+        <ul className="breadcrumb">
+          <li className="breadcrumb-item">
+            <a href="/">Home</a>
+          </li>
+          <li className="breadcrumb-item active">Profile</li>
+        </ul>
+        {memberProfileLoading || !memberProfile ? (
+          <h1>Member Loading</h1>
+        ) : (
+          <>
+            <div className={styles.header}>
+              {/* <ProfileImage src={profileData.picture} alt={profileData.name} />
+               */}
 
-      <div className={styles.header}>
-        {/* <ProfileImage src={profileData.picture} alt={profileData.name} />
-         */}
+              <div className={styles.profileContainer}>
+                {memberProfile && memberProfile?.profile_picture ? (
+                  <img
+                    src={memberProfile?.profile_picture}
+                    alt={"profile"}
+                    className={styles.image}
+                    priority
+                  />
+                ) : (
+                  <img
+                    src={`https://placehold.co/600x400/1f2b35/BDBDBD?text=${memberProfile?.full_name
+                      .split(" ")
+                      .map((word) => word.charAt(0).toUpperCase())
+                      .join("")}`}
+                    alt={"profile"}
+                    className={styles.image}
+                    priority
+                  />
+                )}
+              </div>
 
-        <div className={styles.profileContainer}>
-          {memberProfile && memberProfile?.profile_picture ? (
-            <img
-              src={memberProfile?.profile_picture}
-              alt={"profile"}
-              className={styles.image}
-              priority
-            />
-          ) : (
-            <img
-              src={"/assets/img/profile-avatar.png"}
-              alt={"profile"}
-              className={styles.image}
-              priority
-            />
-          )}
-        </div>
+              <div className={styles.info}>
+                <div>
+                  <h1 className={`${styles.name} mb-2`}>
+                    {memberProfile?.full_name ?? ""}
+                  </h1>
+                  <TierBadge tier={memberProfile?.tier ?? ""} />
+                </div>
 
-        <div className={styles.info}>
-          <div>
-            <h1 className={`${styles.name} mb-2`}>
-              {memberProfile?.full_name ?? ""}
-            </h1>
-            <TierBadge tier={memberProfile?.tier ?? ""} />
-          </div>
+                {/* <p className={`${styles.about} mb-0`}> {profileData.about}</p> */}
 
-          {/* <p className={`${styles.about} mb-0`}> {profileData.about}</p> */}
+                <div className={`${styles.stats} stats`}>
+                  <ProfileStatCard
+                    label="Total Spent"
+                    value={memberProfile?.total_spent ?? 0}
+                    icon={<DollarSign size={14} className="text-theme" />}
+                  />
+                  <ProfileStatCard
+                    label="Last Event"
+                    value={
+                      memberEvents?.length > 0
+                        ? memberEvents.reduce((latest, event) =>
+                            new Date(event.when) > new Date(latest.when)
+                              ? event
+                              : latest
+                          ).title
+                        : "No Last Event"
+                    }
+                    icon={<Calendar size={14} className="text-theme" />}
+                  />
 
-          <div className={`${styles.stats} stats`}>
-            <ProfileStatCard
-              label="Total Spent"
-              value={memberProfile?.total_spent ?? 0}
-              icon={
-                <DollarSign
-                  size={14}
-                  style={{ marginTop: "2px" }}
-                  className="text-theme"
-                />
-              }
-            />
-            <ProfileStatCard
-              label="Last Event"
-              value={profileData?.lastEvent}
-              icon={
-                <Calendar
-                  size={14}
-                  style={{ marginTop: "2px" }}
-                  className="text-theme"
-                />
-              }
-            />
-            <ProfileStatCard
-              label="Location"
-              value={memberProfile?.location ?? "none"}
-              icon={
-                <MapPin
-                  size={14}
-                  style={{ marginTop: "2px" }}
-                  className="text-theme"
-                />
-              }
-            />
-          </div>
+                  <ProfileStatCard
+                    label="Location"
+                    value={memberProfile?.location ?? "none"}
+                    icon={<MapPin size={14} className="text-theme" />}
+                  />
+                </div>
 
-          <div className="d-flex align-items-center flex-wrap gap-4">
-            <a
-              href={profileData.website}
-              className={styles.link}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Globe size={16} />
-              Visit Website
-            </a>
+                <div className="d-flex align-items-center flex-wrap gap-4">
+                  {memberLinks ? (
+                    <a
+                      href={memberLinks?.link}
+                      className={styles.link}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Globe size={16} />
+                      Visit Website
+                    </a>
+                  ) : (
+                    <span className={styles.link}>
+                      <Globe size={16} />
+                      No Website
+                    </span>
+                  )}
 
-            <ProfileIntroVideo
-              className={styles.link}
-              src={profileData.introVideo}
-            />
-          </div>
-        </div>
-      </div>
+                  <ProfileIntroVideo
+                    className={styles.link}
+                    src={memberLinks?.video}
+                    name={memberProfile?.full_name}
+                  />
+                </div>
+              </div>
+            </div>
 
-      <div className="">
-        <h3 className="mb-2">About</h3>
-        <p className={`${styles.about} mb-0`}>
-          {" "}
-          {memberProfile?.about ?? "No Information"}
-        </p>
-      </div>
+            <div className="">
+              <h2 className="font-info mb-2">About</h2>
+              <p className={`${styles.about} mb-0`}>
+                {" "}
+                {memberProfile?.about ? (
+                  memberProfile?.about
+                ) : (
+                  <EmptyDescription />
+                )}
+              </p>
+            </div>
+          </>
+        )}
 
-      <div className={styles.eventsSection}>
-        <h2>Recent Events</h2>
-        <div className={styles.eventsGrid}>
+        <div className={styles.eventsSection}>
+          <h2 className="font-info">Recent Events</h2>
+
           {memberEvents && memberEvents?.length > 0 ? (
-            memberEvents?.map((event, index) => (
-              <ProfileEventCard
-                key={index}
-                id={event.id}
-                index={index}
-                title={event?.title}
-                date={event?.when}
-                venue={getEventVenue(event?.venue_id)}
-                image={event?.profile_picture}
-              />
-            ))
+            <div className={styles.eventsGrid}>
+              {memberEvents?.map((event, index) => (
+                <ProfileEventCard
+                  key={index}
+                  id={event.id}
+                  index={index}
+                  title={event?.title}
+                  date={event?.when}
+                  venue={getEventVenue(event?.venue_id)}
+                  image={event?.profile_picture}
+                />
+              ))}
+            </div>
           ) : (
-            <h1>No Events found </h1>
+            <EmptyEvents />
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
