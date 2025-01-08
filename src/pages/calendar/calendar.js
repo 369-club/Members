@@ -18,6 +18,7 @@ function Calendar() {
     fetchedEvents?.map((event) => ({
       title: event?.title ?? "Event",
       start: event?.when ? new Date(event.when) : new Date(),
+      id: event?.id,
     })) || [];
 
   console.log("🚀 ~ Calendar ~ events:++++++++++++++++ line no 9", events);
@@ -72,6 +73,7 @@ function renderEventContent(eventInfo) {
         startTime={formattedTime}
         startDate={formattedDate}
         name={eventInfo.event.title}
+        id={eventInfo.event.id}
       />
     </>
   );
