@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 
 const EventCardV2 = ({ event, venue }) => {
+  console.log("🚀 ~ EventCardV2 ~ venue:+++++++++++++++++ line no 9", venue);
   return (
     <div className={styles.eventCard}>
       <div className={styles.cardContent}>

@@ -34,7 +34,6 @@ const EventDetails = () => {
             const venue = venues?.find(
               (venue) => venue.id === matchedEvent?.venue_id
             );
-            console.log("🚀 ~ useEffect ~ venue:", venue);
 
             if (venue) {
               setVenueDetails(venue);

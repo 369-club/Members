@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import MemberGrid from "../../components/sections/homepage/member-grid";
 import CustomLoader from "../../components/custom-loader";
 import EventCardV2 from "../../components/sections/homepage/event-card-v2";
@@ -10,7 +10,7 @@ import Seo from "../../utils/seo";
 function Home({ isLoading }) {
   const context = useContext(AppSettings);
   const { members, events, venues } = useFetchData();
-  console.log("🚀 ~ Home ~ events:", events);
+  console.log("🚀 ~ Home ~ venues:+++++++++++++++++++ line no 13", venues);
   const [latestEvent, setLatestEvent] = useState(null);
   const [venueDetails, setVenueDetails] = useState(null);
   console.log("🚀 ~ Home ~ latestEvent:", latestEvent);
@@ -50,6 +50,23 @@ function Home({ isLoading }) {
       }
     }
   }, [events]);
+  const fetchVenueDetails = useCallback(
+    async (venueId) => {
+      try {
+        if (venueId && venues?.length > 0) {
+          const matchedVenue = venues?.find((venue) => venue.id === venueId);
+          if (matchedVenue) {
+            setVenueDetails(matchedVenue);
+          }
+        }
+      } catch (error) {}
+    },
+    [venues]
+  );
+
+  useEffect(() => {
+    fetchVenueDetails(latestEvent?.venue_id);
+  }, [latestEvent]);
   if (!members?.length || !latestEvent) return <CustomLoader gap="200" />;
 
   return (
