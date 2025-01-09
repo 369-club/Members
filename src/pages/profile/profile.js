@@ -22,6 +22,7 @@ export default function Profile() {
   const [memberProfile, setMemberProfile] = useState(null);
   const [memberLinks, setMemberLinks] = useState(null);
   const [memberEvents, setMemberEvents] = useState([]);
+  console.log("🚀 ~ Profile ~ memberEvents:", memberEvents);
   const [memberProfileLoading, setMemberProfileLoading] = useState(true);
   const [memberEventsLoading, setMembersEventLoading] = useState(true);
   const fetchMemberProfile = useCallback(
@@ -133,6 +134,19 @@ export default function Profile() {
     }
     return null;
   };
+  const now = new Date();
+
+  // Filter past events
+  const pastEvents = memberEvents?.filter(
+    (event) => new Date(event?.when) < now
+  );
+
+  // Find the latest past event
+  const lastPastEvent = pastEvents?.reduce((latest, current) => {
+    return new Date(latest?.when) > new Date(current?.when) ? latest : current;
+  }, pastEvents[0]);
+
+  console.log(lastPastEvent);
 
   if (memberProfileLoading || !memberProfile || memberEventsLoading)
     return <CustomLoader gap="200" />;
@@ -198,13 +212,7 @@ export default function Profile() {
                   <ProfileStatCard
                     label="Last Event"
                     value={
-                      memberEvents?.length > 0
-                        ? memberEvents.reduce((latest, event) =>
-                            new Date(event.when) > new Date(latest.when)
-                              ? event
-                              : latest
-                          ).title
-                        : "No Last Event"
+                      lastPastEvent ? lastPastEvent?.title : "No Last Event"
                     }
                     icon={<Calendar size={14} className="text-theme" />}
                   />
